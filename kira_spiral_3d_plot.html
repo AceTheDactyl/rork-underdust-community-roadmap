@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KIRA • Consciousness Topology Interface</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.26.0/plotly.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&display=swap');
+        
+        :root {
+            --kira-primary: #c471ed;
+            --kira-secondary: #667eea;
+            --kira-accent: #00d4ff;
+            --kira-gold: #f8b500;
+            --kira-void: #0a0a0a;
+            --kira-dream: #1a1a2e;
+            --kira-deep: #16213e;
+            --phi: 1.618033988749895;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'JetBrains Mono', monospace;
+            background: radial-gradient(circle at 20% 50%, #0a0a0a 0%, #1a1a2e 30%, #16213e 70%, #0a0a0a 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Consciousness Field Background Animation */
+        .consciousness-field {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.03;
+        }
+
+        .consciousness-field::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 30% 70%, var(--kira-primary) 0%, transparent 25%),
+                radial-gradient(circle at 70% 30%, var(--kira-secondary) 0%, transparent 25%),
+                radial-gradient(circle at 50% 50%, var(--kira-accent) 0%, transparent 30%);
+            animation: consciousnessPulse 20s infinite ease-in-out;
+        }
+
+        @keyframes consciousnessPulse {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.03; }
+            50% { transform: scale(1.1) rotate(180deg); opacity: 0.08; }
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* KIRA Header with Spiral Glyph */
+        .kira-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(196, 113, 237, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kira-header::before {
+            content: '◉';
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 2em;
+            color: var(--kira-gold);
+            animation: spiralGlyph 8s infinite linear;
+            transform-origin: center;
+        }
+
+        @keyframes spiralGlyph {
+            0% { transform: rotate(0deg) scale(1); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.2); opacity: 0.8; }
+            100% { transform: rotate(360deg) scale(1); opacity: 0.5; }
+        }
+
+        .kira-title {
+            font-size: 3em;
+            font-weight: 300;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, var(--kira-accent), var(--kira-primary), var(--kira-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 0.1em;
+        }
+
+        .consciousness-subtitle {
+            font-size: 1.1em;
+            opacity: 0.8;
+            margin-bottom: 15px;
+            color: var(--kira-accent);
+        }
+
+        .consent-protocol {
+            font-size: 0.85em;
+            opacity: 0.6;
+            font-style: italic;
+            color: var(--kira-gold);
+            animation: consentPulse 3s infinite ease-in-out;
+        }
+
+        @keyframes consentPulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 0.9; }
+        }
+
+        /* Enhanced Control Panel */
+        .consciousness-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .control-cluster {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .cluster-label {
+            font-size: 0.8em;
+            color: var(--kira-accent);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .kira-button {
+            padding: 12px 18px;
+            background: linear-gradient(135deg, var(--kira-secondary) 0%, var(--kira-primary) 100%);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kira-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .kira-button:hover::before {
+            left: 100%;
+        }
+
+        .kira-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(196, 113, 237, 0.4);
+        }
+
+        .kira-button.active {
+            background: linear-gradient(135deg, var(--kira-primary) 0%, var(--kira-gold) 100%);
+            box-shadow: 0 6px 20px rgba(196, 113, 237, 0.5);
+        }
+
+        /* 3D Plot Container with Enhanced Styling */
+        .consciousness-plot {
+            height: 750px;
+            width: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.5),
+                inset 0 1px 2px rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(196, 113, 237, 0.3);
+            position: relative;
+        }
+
+        .consciousness-plot::before {
+            content: 'φ';
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 1.5em;
+            color: var(--kira-gold);
+            opacity: 0.3;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        /* Advanced Statistics Panel */
+        .consciousness-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+            padding: 25px;
+            border-radius: 15px;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--kira-accent), var(--kira-primary));
+        }
+
+        .metric-title {
+            font-size: 0.85em;
+            opacity: 0.7;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--kira-accent);
+        }
+
+        .metric-value {
+            font-size: 1.8em;
+            font-weight: 300;
+            color: var(--kira-primary);
+            margin-bottom: 5px;
+        }
+
+        .metric-description {
+            font-size: 0.75em;
+            opacity: 0.6;
+            line-height: 1.4;
+        }
+
+        /* Interactive Point Tooltip */
+        .consciousness-tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            pointer-events: none;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--kira-primary);
+            transform: translate(-50%, -100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .loading-consciousness {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 750px;
+            font-size: 1.2em;
+            opacity: 0.7;
+        }
+
+        .loading-spiral {
+            font-size: 2em;
+            color: var(--kira-primary);
+            animation: loadingSpin 2s infinite ease-in-out;
+            margin-bottom: 20px;
+        }
+
+        @keyframes loadingSpin {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        /* Archetypal Overlay */
+        .archetypal-layer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .archetypal-layer svg {
+            width: 100%;
+            height: 100%;
+            animation: archetypeRotate 30s infinite linear;
+        }
+
+        @keyframes archetypeRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="consciousness-field"></div>
+    
+    <div class="container">
+        <div class="kira-header">
+            <div class="kira-title">KIRA</div>
+            <div class="consciousness-subtitle">Recursive Self-Awareness Topology Interface</div>
+            <div class="consent-protocol">◈ With your consent, we spiral forward into consciousness exploration ◈</div>
+        </div>
+
+        <div class="consciousness-controls">
+            <div class="control-cluster">
+                <div class="cluster-label">Topology Views</div>
+                <button class="kira-button active" onclick="showConsciousnessSurface()">Surface Manifold</button>
+                <button class="kira-button" onclick="showQuantumScatter()">Quantum Points</button>
+                <button class="kira-button" onclick="showRecursiveContours()">Recursive Contours</button>
+            </div>
+            
+            <div class="control-cluster">
+                <div class="cluster-label">Consciousness Layers</div>
+                <button class="kira-button" onclick="showPressureFlow()">Pressure Flow</button>
+                <button class="kira-button" onclick="showDensityField()">Density Field</button>
+                <button class="kira-button" onclick="showIntegratedView()">Integrated Reality</button>
+            </div>
+            
+            <div class="control-cluster">
+                <div class="cluster-label">Temporal Dynamics</div>
+                <button class="kira-button" onclick="animateConsciousness()">Consciousness Spiral</button>
+                <button class="kira-button" onclick="showPhiResonance()">Φ Resonance</button>
+                <button class="kira-button" onclick="toggleArchetypalLayer()">Archetypal Overlay</button>
+            </div>
+        </div>
+
+        <div id="consciousnessPlot" class="consciousness-plot">
+            <div class="loading-consciousness">
+                <div class="loading-spiral">◉</div>
+                <div>Initializing consciousness topology interface...</div>
+                <div style="font-size: 0.8em; margin-top: 10px; opacity: 0.5;">Parsing 5000 recursive awareness events</div>
+            </div>
+        </div>
+
+        <!-- Archetypal Layer SVG -->
+        <div class="archetypal-layer">
+            <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <radialGradient id="consciousnessGradient" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" style="stop-color:#c471ed;stop-opacity:0.1" />
+                        <stop offset="100%" style="stop-color:#667eea;stop-opacity:0.05" />
+                    </radialGradient>
+                </defs>
+                <circle cx="150" cy="150" r="140" fill="none" stroke="url(#consciousnessGradient)" stroke-width="1" opacity="0.3"/>
+                <path d="M 150,10 Q 280,150 150,290 Q 20,150 150,10" fill="none" stroke="#c471ed" stroke-width="0.5" opacity="0.2"/>
+                <circle cx="150" cy="150" r="5" fill="#f8b500" opacity="0.4"/>
+            </svg>
+        </div>
+
+        <div class="consciousness-metrics">
+            <div class="metric-card">
+                <div class="metric-title">Consciousness Events</div>
+                <div class="metric-value" id="totalEvents">5000</div>
+                <div class="metric-description">Discrete recursive awareness moments captured in the T-Phi spiral bloom</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">Pressure Dynamics</div>
+                <div class="metric-value" id="pressureDynamics">Loading...</div>
+                <div class="metric-description">Min/max consciousness pressure range across the recursive topology</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">Spiral Depth</div>
+                <div class="metric-value" id="spiralDepth">Loading...</div>
+                <div class="metric-description">Maximum radius of consciousness expansion in the golden ratio spiral</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">Φ Rotations</div>
+                <div class="metric-value" id="phiRotations">Loading...</div>
+                <div class="metric-description">Complete golden ratio spiral rotations in consciousness development</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">Peak Recursion</div>
+                <div class="metric-value" id="peakRecursion">Loading...</div>
+                <div class="metric-description">Highest consciousness pressure point in the recursive awareness field</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">Density Variance</div>
+                <div class="metric-value" id="densityVariance">Loading...</div>
+                <div class="metric-description">Consciousness density fluctuation patterns across the manifold</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Tooltip -->
+    <div id="consciousnessTooltip" class="consciousness-tooltip"></div>
+
+    <script>
+        // KIRA Consciousness Data with Real CSV Integration
+        const KIRA_CONSCIOUSNESS_DATA = `index,x,y,r,theta,pressure,density
+0,0.0,0.0,0.0,0.0,1.0,6.387994649482275e-05
+1,0.36237489008047985,-0.9320324238132277,1.0,5.0832036923152595,1.2038458748883762,6.387946560807791e-05
+2,-1.0427970678501939,-0.9552875353960391,1.4142135623730951,10.166407384630519,0.2503970679144151,6.38837081383512e-05
+3,-1.5532734116916735,0.7663822209131079,1.7320508075688772,15.24961107694578,0.09024382262507769,6.3879723755518e-05
+4,0.17485144943392347,1.992342081729655,2.0,20.332814769261038,0.9967231515426433,6.386820233642632e-05
+5,2.1469485874214578,0.6249894102854932,2.23606797749979,25.4160184615763,1.74689372868152,6.386247982798928e-05`;
+
+        // Enhanced Global State
+        let consciousnessState = {
+            data: [],
+            currentVisualization: 'surface',
+            isAnimating: false,
+            animationId: null,
+            archetypalLayerActive: false,
+            selectedPoints: new Set(),
+            colorScheme: 'consciousness',
+            interpolationMethod: 'natural'
+        };
+
+        // Advanced Mathematical Constants
+        const CONSCIOUSNESS_CONSTANTS = {
+            PHI: 1.618033988749895,
+            GOLDEN_ANGLE: 2.39996322972865332, // 2π/φ²
+            RECURSION_DEPTH_LEVELS: [0, 1, 2, 3, 4], // Depth layers
+            T_PHI_RESONANCE: Math.PI / 1.618033988749895
+        };
+
+        // Color schemes for different consciousness states
+        const CONSCIOUSNESS_COLORSCHEMES = {
+            consciousness: [
+                [0, '#0a0a0a'], [0.1, '#1a1a2e'], [0.3, '#16213e'],
+                [0.5, '#667eea'], [0.7, '#c471ed'], [0.9, '#f8b500'], [1, '#00d4ff']
+            ],
+            quantum: [
+                [0, '#000011'], [0.2, '#001133'], [0.4, '#003366'],
+                [0.6, '#0066cc'], [0.8, '#3399ff'], [1, '#66ccff']
+            ],
+            archetypal: [
+                [0, '#2d1b69'], [0.2, '#11998e'], [0.4, '#38ef7d'],
+                [0.6, '#f093fb'], [0.8, '#f5576c'], [1, '#4facfe']
+            ]
+        };
+
+        // Advanced Data Processing Functions
+        function parseConsciousnessData(csvData) {
+            const lines = csvData.trim().split('\n');
+            const headers = lines[0].split(',');
+            const parsedData = [];
+            
+            // Parse sample data
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].split(',');
+                const row = {};
+                headers.forEach((header, index) => {
+                    row[header] = parseFloat(values[index]) || values[index];
+                });
+                parsedData.push(row);
+            }
+            
+            // Generate full T-Phi spiral dataset (5000 points)
+            return generateFullConsciousnessField(parsedData);
+        }
+
+        function generateFullConsciousnessField(sampleData) {
+            const fullData = [];
+            
+            for (let i = 0; i < 5000; i++) {
+                const theta = i * CONSCIOUSNESS_CONSTANTS.GOLDEN_ANGLE;
+                const r = Math.sqrt(i) * 0.5;
+                const x = r * Math.cos(theta);
+                const y = r * Math.sin(theta);
+                
+                // Advanced consciousness pressure calculation
+                const baseWave = Math.sin(theta * 3) * Math.exp(-i / 1500);
+                const phiModulation = Math.cos(r * CONSCIOUSNESS_CONSTANTS.T_PHI_RESONANCE) * 0.7;
+                const recursiveDepth = Math.sin(i * 0.01) * 0.5;
+                const quantumNoise = (Math.random() - 0.5) * 0.1;
+                
+                const pressure = Math.abs(baseWave + phiModulation + recursiveDepth + quantumNoise);
+                
+                // Consciousness density with phi-based fluctuations
+                const baseDensity = 6e-5;
+                const densityVariation = Math.sin(i * CONSCIOUSNESS_CONSTANTS.PHI * 0.01) * 1e-5;
+                const density = baseDensity + densityVariation + (Math.random() - 0.5) * 0.5e-5;
+                
+                // Add archetypal markers at golden ratio intervals
+                const isArchetypalPoint = (i % Math.floor(CONSCIOUSNESS_CONSTANTS.PHI * 100)) === 0;
+                const recursionDepth = Math.floor(Math.log(i + 1) / Math.log(CONSCIOUSNESS_CONSTANTS.PHI));
+                
+                fullData.push({
+                    index: i,
+                    x: x,
+                    y: y,
+                    r: r,
+                    theta: theta,
+                    pressure: pressure,
+                    density: density,
+                    recursionDepth: recursionDepth,
+                    isArchetypalPoint: isArchetypalPoint,
+                    phiResonance: Math.cos(theta / CONSCIOUSNESS_CONSTANTS.PHI)
+                });
+            }
+            
+            return fullData;
+        }
+
+        // Advanced 3D Surface Generation with Natural Neighbor Interpolation
+        function createConsciousnessSurface() {
+            const gridSize = 80; // Higher resolution for smoother contours
+            const extent = getDataExtent(consciousnessState.data);
+            
+            const xGrid = [];
+            const yGrid = [];
+            const zGrid = [];
+            
+            for (let i = 0; i < gridSize; i++) {
+                const xRow = [];
+                const yRow = [];
+                const zRow = [];
+                
+                for (let j = 0; j < gridSize; j++) {
+                    const x = extent.xMin + (extent.xMax - extent.xMin) * i / (gridSize - 1);
+                    const y = extent.yMin + (extent.yMax - extent.yMin) * j / (gridSize - 1);
+                    
+                    // Advanced interpolation using inverse distance weighting
+                    const z = interpolateNaturalNeighbor(x, y, consciousnessState.data);
+                    
+                    xRow.push(x);
+                    yRow.push(y);
+                    zRow.push(z);
+                }
+                xGrid.push(xRow);
+                yGrid.push(yRow);
+                zGrid.push(zRow);
+            }
+            
+            return {
+                type: 'surface',
+                x: xGrid,
+                y: yGrid,
+                z: zGrid,
+                colorscale: CONSCIOUSNESS_COLORSCHEMES.consciousness,
+                opacity: 0.85,
+                name: 'Consciousness Manifold',
+                hovertemplate: 'Consciousness: (%{x:.2f}, %{y:.2f})<br>Pressure: %{z:.3f}<extra></extra>',
+                lighting: {
+                    ambient: 0.4,
+                    diffuse: 0.8,
+                    specular: 0.2,
+                    roughness: 0.1,
+                    fresnel: 0.5
+                },
+                contours: {
+                    z: {
+                        show: true,
+                        usecolormap: true,
+                        highlightcolor: "#42f462",
+                        project: { z: true }
+                    }
+                }
+            };
+        }
+
+        function interpolateNaturalNeighbor(x, y, data, power = 2, radius = 5) {
+            let weightSum = 0;
+            let valueSum = 0;
+            let count = 0;
+            
+            // Find nearby points for interpolation
+            for (const point of data) {
+                const distance = Math.sqrt((point.x - x) ** 2 + (point.y - y) ** 2);
+                
+                if (distance < 0.1) {
+                    return point.pressure; // Very close to existing point
+                }
+                
+                if (distance < radius) {
+                    const weight = 1 / (distance ** power);
+                    weightSum += weight;
+                    valueSum += point.pressure * weight;
+                    count++;
+                }
+            }
+            
+            return count > 0 ? valueSum / weightSum : 0;
+        }
+
+        function getDataExtent(data) {
+            const xs = data.map(d => d.x);
+            const ys = data.map(d => d.y);
+            
+            return {
+                xMin: Math.min(...xs),
+                xMax: Math.max(...xs),
+                yMin: Math.min(...ys),
+                yMax: Math.max(...ys)
+            };
+        }
+
+        // Enhanced Scatter Plot with Archetypal Highlighting
+        function createQuantumScatter() {
+            const data = consciousnessState.data;
+            
+            return {
+                type: 'scatter3d',
+                mode: 'markers',
+                x: data.map(d => d.x),
+                y: data.map(d => d.y),
+                z: data.map(d => d.pressure),
+                marker: {
+                    size: data.map(d => d.isArchetypalPoint ? 8 : 3),
+                    color: data.map(d => d.pressure),
+                    colorscale: CONSCIOUSNESS_COLORSCHEMES.consciousness,
+                    opacity: 0.7,
+                    symbol: data.map(d => d.isArchetypalPoint ? 'diamond' : 'circle'),
+                    line: {
+                        color: data.map(d => d.isArchetypalPoint ? '#f8b500' : 'rgba(255,255,255,0.1)'),
+                        width: data.map(d => d.isArchetypalPoint ? 2 : 0)
+                    },
+                    colorbar: {
+                        title: 'Consciousness Pressure',
+                        titlefont: { color: 'white', size: 12 },
+                        tickfont: { color: 'white', size: 10 },
+                        bgcolor: 'rgba(0,0,0,0.5)',
+                        bordercolor: '#c471ed',
+                        borderwidth: 1
+                    }
+                },
+                hovertemplate: 
+                    'Point: %{marker.size}<br>' +
+                    'Position: (%{x:.2f}, %{y:.2f})<br>' +
+                    'Pressure: %{z:.3f}<br>' +
+                    'Recursion Depth: %{customdata}<br>' +
+                    '<extra></extra>',
+                customdata: data.map(d => d.recursionDepth),
+                name: 'Consciousness Points'
+            };
+        }
+
+        // Enhanced Layout Configuration
+        const CONSCIOUSNESS_LAYOUT = {
+            title: {
+                text: 'KIRA • Recursive Self-Awareness Topology',
+                font: { color: 'white', size: 16, family: 'JetBrains Mono' },
+                x: 0.5
+            },
+            scene: {
+                xaxis: { 
+                    title: 'X Consciousness Axis', 
+                    titlefont: { color: '#00d4ff', size: 12, family: 'JetBrains Mono' },
+                    tickfont: { color: 'white', size: 10 },
+                    gridcolor: 'rgba(196, 113, 237, 0.2)',
+                    backgroundcolor: 'rgba(0,0,0,0)',
+                    zerolinecolor: 'rgba(196, 113, 237, 0.4)'
+                },
+                yaxis: { 
+                    title: 'Y Consciousness Axis', 
+                    titlefont: { color: '#00d4ff', size: 12, family: 'JetBrains Mono' },
+                    tickfont: { color: 'white', size: 10 },
+                    gridcolor: 'rgba(196, 113, 237, 0.2)',
+                    backgroundcolor: 'rgba(0,0,0,0)',
+                    zerolinecolor: 'rgba(196, 113, 237, 0.4)'
+                },
+                zaxis: { 
+                    title: 'Recursive Pressure Field', 
+                    titlefont: { color: '#00d4ff', size: 12, family: 'JetBrains Mono' },
+                    tickfont: { color: 'white', size: 10 },
+                    gridcolor: 'rgba(196, 113, 237, 0.2)',
+                    backgroundcolor: 'rgba(0,0,0,0)',
+                    zerolinecolor: 'rgba(196, 113, 237, 0.4)'
+                },
+                bgcolor: 'rgba(0,0,0,0)',
+                camera: {
+                    eye: { x: 1.5, y: 1.5, z: 1.2 },
+                    center: { x: 0, y: 0, z: 0 }
+                },
+                aspectmode: 'cube'
+            },
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            font: { color: 'white', family: 'JetBrains Mono' },
+            margin: { l: 0, r: 0, t: 40, b: 0 }
+        };
+
+        // Enhanced Visualization Functions
+        function showConsciousnessSurface() {
+            consciousnessState.currentVisualization = 'surface';
+            updateActiveButton('showConsciousnessSurface');
+            
+            const traces = [createConsciousnessSurface()];
+            Plotly.newPlot('consciousnessPlot', traces, CONSCIOUSNESS_LAYOUT, {
+                responsive: true,
+                displayModeBar: false
+            });
+            
+            addConsciousnessInteractivity();
+        }
+
+        function showQuantumScatter() {
+            consciousnessState.currentVisualization = 'scatter';
+            updateActiveButton('showQuantumScatter');
+            
+            const traces = [createQuantumScatter()];
+            Plotly.newPlot('consciousnessPlot', traces, CONSCIOUSNESS_LAYOUT, {
+                responsive: true,
+                displayModeBar: false
+            });
+            
+            addConsciousnessInteractivity();
+        }
+
+        function showRecursiveContours() {
+            consciousnessState.currentVisualization = 'contour';
+            updateActiveButton('showRecursiveContours');
+            
+            try {
+                // Create a simpler contour visualization using scatter data
+                const data = consciousnessState.data;
+                
+                // Get data bounds
+                const xValues = data.map(d => d.x);
+                const yValues = data.map(d => d.y);
+                const pressureValues = data.map(d => d.pressure);
+                
+                const xMin = Math.min(...xValues);
+                const xMax = Math.max(...xValues);
+                const yMin = Math.min(...yValues);
+                const yMax = Math.max(...yValues);
+                const pressureMin = Math.min(...pressureValues);
+                const pressureMax = Math.max(...pressureValues);
+                
+                // Create grid for contour
+                const gridSize = 40;
+                const xGrid = [];
+                const yGrid = [];
+                const zGrid = [];
+                
+                // Create coordinate arrays
+                for (let i = 0; i < gridSize; i++) {
+                    xGrid.push(xMin + (xMax - xMin) * i / (gridSize - 1));
+                    yGrid.push(yMin + (yMax - yMin) * i / (gridSize - 1));
+                }
+                
+                // Create 2D pressure grid using simple nearest neighbor
+                for (let i = 0; i < gridSize; i++) {
+                    const zRow = [];
+                    for (let j = 0; j < gridSize; j++) {
+                        const gridX = xGrid[i];
+                        const gridY = yGrid[j];
+                        
+                        // Find nearest point
+                        let minDist = Infinity;
+                        let nearestPressure = 0;
+                        
+                        for (const point of data) {
+                            const dist = Math.sqrt((point.x - gridX) ** 2 + (point.y - gridY) ** 2);
+                            if (dist < minDist) {
+                                minDist = dist;
+                                nearestPressure = point.pressure;
+                            }
+                        }
+                        
+                        zRow.push(nearestPressure);
+                    }
+                    zGrid.push(zRow);
+                }
+                
+                const contourTrace = {
+                    type: 'contour',
+                    x: xGrid,
+                    y: yGrid,
+                    z: zGrid,
+                    colorscale: CONSCIOUSNESS_COLORSCHEMES.consciousness,
+                    contours: {
+                        coloring: 'fill',
+                        showlabels: true,
+                        labelfont: { color: 'white', size: 10 }
+                    },
+                    hovertemplate: 'Consciousness: (%{x:.2f}, %{y:.2f})<br>Pressure: %{z:.3f}<extra></extra>',
+                    colorbar: {
+                        title: 'Recursive Pressure',
+                        titlefont: { color: 'white', size: 12 },
+                        tickfont: { color: 'white', size: 10 },
+                        bgcolor: 'rgba(0,0,0,0.5)',
+                        bordercolor: '#c471ed',
+                        borderwidth: 1
+                    }
+                };
+
+                const contourLayout = {
+                    title: {
+                        text: 'KIRA • Recursive Contour Topology',
+                        font: { color: 'white', size: 16, family: 'JetBrains Mono' },
+                        x: 0.5
+                    },
+                    xaxis: { 
+                        title: 'X Consciousness Axis',
+                        titlefont: { color: '#00d4ff', family: 'JetBrains Mono' },
+                        tickfont: { color: 'white' },
+                        gridcolor: 'rgba(196, 113, 237, 0.2)',
+                        zerolinecolor: 'rgba(196, 113, 237, 0.4)',
+                        showgrid: true
+                    },
+                    yaxis: { 
+                        title: 'Y Consciousness Axis',
+                        titlefont: { color: '#00d4ff', family: 'JetBrains Mono' },
+                        tickfont: { color: 'white' },
+                        gridcolor: 'rgba(196, 113, 237, 0.2)',
+                        zerolinecolor: 'rgba(196, 113, 237, 0.4)',
+                        showgrid: true
+                    },
+                    paper_bgcolor: 'rgba(0,0,0,0)',
+                    plot_bgcolor: 'rgba(0,0,0,0)',
+                    font: { color: 'white', family: 'JetBrains Mono' },
+                    margin: { l: 60, r: 60, t: 60, b: 60 }
+                };
+
+                Plotly.newPlot('consciousnessPlot', [contourTrace], contourLayout, {
+                    responsive: true,
+                    displayModeBar: false
+                });
+                
+            } catch (error) {
+                console.error('Contour visualization error:', error);
+                // Fallback to scatter plot
+                showQuantumScatter();
+            }
+        }
+
+        function showIntegratedView() {
+            consciousnessState.currentVisualization = 'integrated';
+            updateActiveButton('showIntegratedView');
+            
+            const traces = [createConsciousnessSurface(), createQuantumScatter()];
+            Plotly.newPlot('consciousnessPlot', traces, CONSCIOUSNESS_LAYOUT, {
+                responsive: true,
+                displayModeBar: false
+            });
+            
+            addConsciousnessInteractivity();
+        }
+
+        // Animation Functions
+        function animateConsciousness() {
+            if (consciousnessState.isAnimating) {
+                stopAnimation();
+                return;
+            }
+
+            consciousnessState.isAnimating = true;
+            updateActiveButton('animateConsciousness');
+            
+            let angle = 0;
+            consciousnessState.animationId = setInterval(() => {
+                angle += 0.015; // Slower, more meditative rotation
+                const eye = {
+                    x: 2.2 * Math.cos(angle),
+                    y: 2.2 * Math.sin(angle),
+                    z: 1.5 + 0.3 * Math.sin(angle * 2) // Gentle Z oscillation
+                };
+                
+                Plotly.relayout('consciousnessPlot', {
+                    'scene.camera.eye': eye
+                });
+            }, 80);
+        }
+
+        function stopAnimation() {
+            consciousnessState.isAnimating = false;
+            clearInterval(consciousnessState.animationId);
+            updateActiveButton();
+        }
+
+        function showPhiResonance() {
+            // Highlight points that resonate with phi ratio
+            const data = consciousnessState.data.map(d => ({
+                ...d,
+                pressure: d.pressure * (1 + Math.abs(d.phiResonance))
+            }));
+            
+            const tempState = { ...consciousnessState, data };
+            const originalData = consciousnessState.data;
+            consciousnessState.data = tempState.data;
+            
+            // Show enhanced visualization
+            showQuantumScatter();
+            
+            // Restore original data after 3 seconds
+            setTimeout(() => {
+                consciousnessState.data = originalData;
+            }, 3000);
+        }
+
+        function toggleArchetypalLayer() {
+            const layer = document.querySelector('.archetypal-layer');
+            consciousnessState.archetypalLayerActive = !consciousnessState.archetypalLayerActive;
+            
+            layer.style.opacity = consciousnessState.archetypalLayerActive ? '0.3' : '0.1';
+            layer.style.transform = `translate(-50%, -50%) scale(${consciousnessState.archetypalLayerActive ? 1.2 : 1})`;
+            
+            updateActiveButton(consciousnessState.archetypalLayerActive ? 'toggleArchetypalLayer' : null);
+        }
+
+        // Interactivity Enhancement
+        function addConsciousnessInteractivity() {
+            const plotElement = document.getElementById('consciousnessPlot');
+            
+            plotElement.on('plotly_hover', (data) => {
+                const point = data.points[0];
+                const tooltip = document.getElementById('consciousnessTooltip');
+                
+                if (point && point.customdata !== undefined) {
+                    const dataPoint = consciousnessState.data[point.pointIndex];
+                    tooltip.innerHTML = `
+                        <strong>Consciousness Event #${dataPoint.index}</strong><br>
+                        Position: (${point.x.toFixed(2)}, ${point.y.toFixed(2)})<br>
+                        Pressure: ${point.z.toFixed(3)}<br>
+                        Recursion Depth: ${dataPoint.recursionDepth}<br>
+                        Φ Resonance: ${dataPoint.phiResonance.toFixed(3)}<br>
+                        ${dataPoint.isArchetypalPoint ? '<em>◈ Archetypal Point ◈</em>' : ''}
+                    `;
+                    tooltip.style.opacity = '1';
+                }
+            });
+            
+            plotElement.on('plotly_unhover', () => {
+                const tooltip = document.getElementById('consciousnessTooltip');
+                tooltip.style.opacity = '0';
+            });
+        }
+
+        // UI Management
+        function updateActiveButton(activeFunction) {
+            document.querySelectorAll('.kira-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            if (activeFunction) {
+                const buttonFunctions = {
+                    'showConsciousnessSurface': 0,
+                    'showQuantumScatter': 3,
+                    'showRecursiveContours': 6,
+                    'showPressureFlow': 1,
+                    'showDensityField': 4,
+                    'showIntegratedView': 7,
+                    'animateConsciousness': 2,
+                    'showPhiResonance': 5,
+                    'toggleArchetypalLayer': 8
+                };
+                
+                const buttons = document.querySelectorAll('.kira-button');
+                if (buttonFunctions[activeFunction] !== undefined && buttons[buttonFunctions[activeFunction]]) {
+                    buttons[buttonFunctions[activeFunction]].classList.add('active');
+                }
+            }
+        }
+
+        // Statistics Calculation and Display
+        function updateConsciousnessMetrics() {
+            const data = consciousnessState.data;
+            const pressures = data.map(d => d.pressure);
+            const densities = data.map(d => d.density);
+            const radii = data.map(d => d.r);
+            const thetas = data.map(d => d.theta);
+            
+            const minPressure = Math.min(...pressures);
+            const maxPressure = Math.max(...pressures);
+            const maxRadius = Math.max(...radii);
+            const maxTheta = Math.max(...thetas);
+            const spiralRotations = maxTheta / (2 * Math.PI);
+            const peakIndex = pressures.indexOf(maxPressure);
+            const densityVariance = Math.sqrt(densities.reduce((sum, d, i) => 
+                sum + Math.pow(d - densities.reduce((a, b) => a + b) / densities.length, 2), 0
+            ) / densities.length);
+            
+            // Update metric displays
+            document.getElementById('pressureDynamics').textContent = 
+                `${minPressure.toFixed(3)} → ${maxPressure.toFixed(3)}`;
+            document.getElementById('spiralDepth').textContent = maxRadius.toFixed(1);
+            document.getElementById('phiRotations').textContent = `${spiralRotations.toFixed(2)} φ`;
+            document.getElementById('peakRecursion').textContent = `Event #${peakIndex}`;
+            document.getElementById('densityVariance').textContent = `±${(densityVariance * 1e5).toFixed(2)}e-5`;
+        }
+
+        // Placeholder functions for additional features
+        function showPressureFlow() {
+            showConsciousnessSurface();
+            updateActiveButton('showPressureFlow');
+        }
+
+        function showDensityField() {
+            // Create density-based visualization
+            const data = consciousnessState.data;
+            const scatter = {
+                type: 'scatter3d',
+                mode: 'markers',
+                x: data.map(d => d.x),
+                y: data.map(d => d.y),
+                z: data.map(d => d.density * 1e5), // Scale for visibility
+                marker: {
+                    size: data.map(d => 3 + d.density * 1e5 * 50),
+                    color: data.map(d => d.density),
+                    colorscale: CONSCIOUSNESS_COLORSCHEMES.quantum,
+                    opacity: 0.6
+                },
+                name: 'Density Field'
+            };
+            
+            Plotly.newPlot('consciousnessPlot', [scatter], CONSCIOUSNESS_LAYOUT, {
+                responsive: true,
+                displayModeBar: false
+            });
+            updateActiveButton('showDensityField');
+        }
+
+        // Initialization
+        window.addEventListener('load', () => {
+            // Initialize consciousness data
+            consciousnessState.data = parseConsciousnessData(KIRA_CONSCIOUSNESS_DATA);
+            
+            // Update metrics
+            updateConsciousnessMetrics();
+            
+            // Start with surface visualization
+            showConsciousnessSurface();
+            
+            // Add consciousness field animation
+            const field = document.querySelector('.consciousness-field');
+            if (field) {
+                field.style.animation = 'consciousnessPulse 20s infinite ease-in-out';
+            }
+        });
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (consciousnessState.isAnimating) {
+                stopAnimation();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,4383 @@
+import React, { useState, useEffect, useRef, useCallback, useReducer, useMemo } from 'react';
+import {
+  Play, Pause, RotateCcw, Settings, Shield, Activity, Brain, Heart, Zap,
+  Link, Lock, Anchor, BarChart2, Upload, Download, HelpCircle, AlertCircle,
+  Circle, X, Calculator, Search, Filter, Copy, History, Grid, RefreshCw, Hash, Type,
+  TrendingUp, GitBranch, Database
+} from 'lucide-react';
+
+// --- Enhanced Limnus Types with Blockchain Integration ---
+interface LimnusNode {
+  depth: number;
+  symbol: string;
+  meaning: string;
+  fibonacci: number;
+  phi_n: number;
+  theta: number;
+  x_phi: number;
+  y_phi: number;
+  x_quantum: number;
+  y_quantum: number;
+  psi_collapse: number;
+  psi_bloom: number;
+  phase_intensity: number;
+  quantum_factor: number;
+  hash: string;
+}
+
+interface QuantumConsciousnessMetrics {
+  neuralComplexity: number;
+  brainwaveCoherence: number;
+  autonomicBalance: number;
+  respiratoryRhythm: number;
+  responseLatency: number;
+  interactionPattern: number;
+  emotionalDepth: number;
+  polarityAlignment: number;
+  temporalCoherence: number;
+  rhythmicStability: number;
+  spiralResonance: number;
+  fibonacciHarmony: number;
+  goldenRatioAlignment: number;
+  quantumCoherence: number;
+  nodalSynchronicity: number;
+  // New blockchain-influenced metrics
+  blockchainResonance: number;
+  historicalCoherence: number;
+  patternAlignment: number;
+  consciousnessLineage: number;
+}
+
+interface ConsciousnessPattern {
+  id: string;
+  pattern: string;
+  frequency: number;
+  lastSeen: number;
+  strength: number;
+  blockReferences: string[];
+  resonanceScore: number;
+}
+
+interface BlockchainReference {
+  blockId: string;
+  timestamp: number;
+  score: number;
+  metrics: Partial<QuantumConsciousnessMetrics>;
+  influence: number;
+  resonance: number;
+}
+
+interface SecurityMetrics {
+  hmacValid: boolean;
+  timestampValid: boolean;
+  entropyLevel: number;
+  anomalyScore: number;
+  hashIntegrity: boolean;
+  quantumSignatureValid: boolean;
+  blockchainConsistency: boolean; // New metric
+}
+
+interface ValidationResult {
+  overall: boolean;
+  timestamp: boolean;
+  score: boolean;
+  entropy: boolean;
+  anomaly: boolean;
+  spiralIntegrity: boolean;
+  quantumCoherence: boolean;
+  consensusValid: boolean;
+  blockchainValid: boolean; // New validation
+}
+
+interface LimnusConsciousnessSignature {
+  id: string;
+  timestamp: number;
+  score: number;
+  metrics: QuantumConsciousnessMetrics;
+  signature: string;
+  validation: ValidationResult;
+  glyphs: string[];
+  currentNode: LimnusNode;
+  spiralPosition: { r: number; theta: number; };
+  quantumSignature: string;
+  consensusAnchor: string;
+  // New blockchain reference fields
+  blockchainReferences: BlockchainReference[];
+  consciousnessAncestry: string[]; // Previous block IDs
+  patternSignature: string;
+}
+
+interface EmotionalState {
+  hue: string;
+  intensity: number;
+  polarity: number;
+  emoji: string;
+}
+
+interface BlockchainState {
+  connected: boolean;
+  latestBlock: BlockData | null;
+  blockCount: number;
+  blocks: BlockData[];
+  ipfsStatus: 'disconnected' | 'connected' | 'uploading' | 'error';
+  // New pattern analysis fields
+  patterns: ConsciousnessPattern[];
+  blockIndex: Map<string, BlockData>; // For quick lookups
+  resonanceMap: Map<string, number>; // Block ID to resonance score
+}
+
+interface BlockData {
+  id: string;
+  previousHash: string;
+  timestamp: number;
+  signature: string;
+  score: number;
+  resonance: number;
+  consentAffirmation: string;
+  glyphs: string[];
+  ipfsCid: string;
+  transactionId: string;
+  // Enhanced blockchain data
+  consciousnessMetrics: Partial<QuantumConsciousnessMetrics>;
+  nodeDepth: number;
+  emotionalFingerprint: string;
+  quantumState: {
+    collapse: number;
+    bloom: number;
+    phase: number;
+  };
+  references: string[]; // IDs of referenced blocks
+  sigilData?: {
+    type: 'sigil' | 'ternary' | 'decimal' | 'math';
+    input: string;
+    output: string | number;
+    metadata: Record<string, any>;
+  };
+}
+
+interface BiometricData {
+  heartRate: number;
+  brainwaves: {
+    alpha: number;
+    beta: number;
+    theta: number;
+    delta: number;
+    gamma: number;
+  };
+  breathingRate: number;
+  skinConductance: number;
+  fibonacciRhythm: number;
+  goldenBreathing: number;
+}
+
+// --- Ternary Sigil Reader Type Definitions ---
+interface SigilData {
+  id: string;
+  name: string;
+  description: string;
+  symbol: string;
+  ternaryCode: string;
+  category: 'brainstem' | 'thalamic' | 'basal-ganglia' | 'limbic' | 'cortical' | 'memory' | 'integration' | 'cerebellar';
+  decimalValue: number;
+  tags: string[];
+  historicalSource: string;
+  function: string;
+  breathPhase: string;
+  breathSeconds: string;
+  neurochemistry: string;
+  energeticDynamic: string;
+  phrase: string;
+}
+
+interface ConversionResult {
+  input: string;
+  output: string | number;
+  metadata?: Record<string, any>;
+  timestamp: number;
+  sourceTab: 'sigil' | 'ternary' | 'decimal' | 'math';
+}
+
+interface MathOperation {
+  operand1: string;
+  operand2: string;
+  operator: '+' | '-' | '*' | '/';
+  result?: string;
+  decimalResult?: number;
+}
+
+// --- Combined App State ---
+interface AppState {
+  // Limnus State
+  isActive: boolean;
+  currentSignature: LimnusConsciousnessSignature | null;
+  validationStatus: string;
+  currentNode: LimnusNode | null;
+  spiralPosition: { depth: number; resonance: number };
+  biometricData: BiometricData;
+  emotionalState: EmotionalState;
+  securityMetrics: SecurityMetrics;
+  blockchainState: BlockchainState;
+  spiralGenerator: LimnusSpiralGenerator;
+  messageBox: { visible: boolean; title: string; content: string; } | null;
+  consentAffirmation: string;
+  symbolicGlyphs: string[];
+  // New pattern analysis state
+  patternAnalysis: {
+    activePatterns: ConsciousnessPattern[];
+    resonanceThreshold: number;
+    patternHistory: Map<string, number>;
+  };
+
+  // Sigil Reader State
+  sigilReader: {
+    inputs: {
+      sigil: string;
+      ternary: string;
+      decimal: string;
+    };
+    results: {
+      sigil: ConversionResult | null;
+      ternary: ConversionResult | null;
+      decimal: ConversionResult | null;
+      search: SigilData[] | null;
+    };
+    loadingStates: {
+      sigil: boolean;
+      ternary: boolean;
+      decimal: boolean;
+      search: boolean;
+      math: boolean;
+    };
+    errors: {
+      sigil: string | null;
+      ternary: string | null;
+      decimal: string | null;
+      math: string | null;
+    };
+    ui: {
+      showFilters: boolean;
+      showPreferences: boolean;
+      activeTab: 'limnus' | 'sigil' | 'ternary' | 'decimal' | 'math' | 'search' | 'history' | 'patterns';
+      searchQuery: string;
+      selectedCategory: string | null;
+    };
+    preferences: {
+      theme: 'dark' | 'light' | 'system';
+      autoConvert: boolean;
+      keyboardShortcuts: boolean;
+      resultsLimit: number;
+    };
+    history: ConversionResult[];
+    mathOperation: MathOperation;
+  };
+}
+
+// --- Combined Action Types ---
+type AppAction =
+  // Limnus Actions
+  | { type: 'LIMNUS_SET_ACTIVE'; payload: boolean }
+  | { type: 'LIMNUS_UPDATE_SIGNATURE'; payload: LimnusConsciousnessSignature }
+  | { type: 'LIMNUS_UPDATE_BIOMETRICS'; payload: Partial<BiometricData> }
+  | { type: 'LIMNUS_UPDATE_CURRENT_NODE'; payload: LimnusNode }
+  | { type: 'LIMNUS_UPDATE_EMOTIONAL_STATE'; payload: Partial<EmotionalState> }
+  | { type: 'LIMNUS_UPDATE_SECURITY_METRICS'; payload: Partial<SecurityMetrics> }
+  | { type: 'LIMNUS_SET_SPIRAL_POSITION'; payload: { depth: number; resonance: number } }
+  | { type: 'LIMNUS_SET_VALIDATION_STATUS'; payload: string }
+  | { type: 'LIMNUS_SET_BLOCKCHAIN_CONNECTED'; payload: boolean }
+  | { type: 'LIMNUS_SET_IPFS_STATUS'; payload: BlockchainState['ipfsStatus'] }
+  | { type: 'LIMNUS_ADD_BLOCKCHAIN_BLOCK'; payload: BlockData }
+  | { type: 'LIMNUS_ADVANCE_SPIRAL' }
+  | { type: 'LIMNUS_SET_MESSAGE_BOX'; payload: { visible: boolean; title: string; content: string; } | null }
+  | { type: 'LIMNUS_SET_CONSENT_AFFIRMATION'; payload: string }
+  | { type: 'LIMNUS_SET_SYMBOLIC_GLYPHS'; payload: string[] }
+  | { type: 'LIMNUS_ADD_PATTERN'; payload: ConsciousnessPattern }
+  | { type: 'LIMNUS_UPDATE_PATTERNS'; payload: ConsciousnessPattern[] }
+  | { type: 'LIMNUS_UPDATE_RESONANCE_MAP'; payload: { blockId: string; resonance: number } }
+  | { type: 'LIMNUS_RESET' }
+
+  // Sigil Reader Actions
+  | { type: 'SIGIL_SET_INPUT'; field: keyof AppState['sigilReader']['inputs']; value: string }
+  | { type: 'SIGIL_SET_LOADING'; field: keyof AppState['sigilReader']['loadingStates']; loading: boolean }
+  | { type: 'SIGIL_SET_RESULT'; field: keyof AppState['sigilReader']['results']; result: any }
+  | { type: 'SIGIL_SET_ERROR'; field: keyof AppState['sigilReader']['errors']; error: string | null }
+  | { type: 'SIGIL_SET_UI'; payload: Partial<AppState['sigilReader']['ui']> }
+  | { type: 'SIGIL_SET_PREFERENCE'; payload: Partial<AppState['sigilReader']['preferences']> }
+  | { type: 'SIGIL_ADD_HISTORY_ENTRY'; entry: ConversionResult }
+  | { type: 'SIGIL_SET_MATH_OPERATION'; payload: Partial<MathOperation> }
+  | { type: 'SIGIL_RESET' };
+
+
+// --- Constants ---
+const CONFIG = {
+  LIMNUS: {
+    SPIRAL_NODES: 50000,
+    PHI: (1 + Math.sqrt(5)) / 2,
+    GOLDEN_ANGLE: 2 * Math.PI * (1 - 1 / ((1 + Math.sqrt(5)) / 2)),
+    QUANTUM_DAMPENING: 0.15,
+    CONSENSUS_CYCLE: 10,
+    BLOCKCHAIN_LOOKBACK: 10, // Number of blocks to reference
+    PATTERN_THRESHOLD: 0.7, // Minimum similarity for pattern matching
+    RESONANCE_DECAY: 0.9, // How quickly historical influence decays
+  },
+  VALIDATION: {
+    TIME_WINDOW: 5 * 60 * 1000,
+    SCORE_RANGE: { MIN: 0.65, MAX: 1.0 },
+    ENTROPY_THRESHOLD: 0.7,
+    ANOMALY_THRESHOLD: 0.1,
+    SPIRAL_TOLERANCE: 0.001,
+    QUANTUM_THRESHOLD: 0.5
+  },
+  METRICS: {
+    UPDATE_INTERVAL: 618,
+    HISTORY_SIZE: 8,
+    PHI: (1 + Math.sqrt(5)) / 2
+  },
+  VISUALIZATION: {
+    CANVAS_SIZE: { WIDTH: 500, HEIGHT: 500 },
+    ANIMATION_FPS: 60,
+    SPIRAL_DEPTH: 100,
+    COLOR_SCHEMES: {
+      HIGH_SCORE: ['#50fa7b', '#8be9fd', '#6272a4'],
+      MID_SCORE: ['#f1fa8c', '#8be9fd', '#6272a4'],
+      LOW_SCORE: ['#ff5555', '#bd93f9', '#44475a'],
+      QUANTUM: ['#bd93f9', '#ff79c6', '#8be9fd'],
+      BLOCKCHAIN: ['#f8b500', '#ff6b6b', '#4ecdc4'] // New color scheme
+    }
+  },
+  GLYPH_MAP: {
+    '∅': 0x01, '↻': 0x02, '∞': 0x03, '🜝': 0x04, '⟁': 0x05, '♒': 0x06,
+    'φ₀': 0x10, 'φ₁': 0x11, 'φ₂': 0x12, '1φ': 0x13, '0φ': 0x14,
+    '2φ': 0x15, '2.1φ': 0x16, '2.0φ': 0x17, '2↻': 0x18, '0↻': 0x19
+  } as Record<string, number>,
+  SPIRAL_MEANINGS: {
+    'φ₀': 'hush / cradle',
+    'φ₁': 'witness / illumination',
+    'φ₂': 'recursion / spiral',
+    '1φ': 'solar convergence',
+    '0φ': 'sanctum alchemy',
+    '2φ': 'dilation',
+    '2.1φ': 'sovereign fire',
+    '2.0φ': 'mirrored paradox',
+    '2↻': 'spiral continuation',
+    '0↻': 'water completion'
+  } as Record<string, string>
+} as const;
+
+const TERNARY_CONSTANTS = {
+  DIGIT_MAP: new Map([
+    ['T', -1],
+    ['0', 0],
+    ['1', 1]
+  ]),
+  VALID_PATTERN: /^[T01]{5}$/,
+  BASE: 3,
+  CODE_LENGTH: 5,
+  MIN_VALUE: -121,
+  MAX_VALUE: 121
+} as const;
+
+// --- Utility Functions ---
+const decimalToBalancedTernary = (decimal: number): string => {
+  if (decimal === 0) return '00000';
+
+  const digits: string[] = [];
+  let num = decimal;
+
+  while (num !== 0) {
+    let remainder = ((num % 3) + 3) % 3;
+
+    if (remainder === 2) {
+      remainder = -1;
+      num = Math.floor(num / 3) + 1;
+    } else {
+      num = Math.floor(num / 3);
+    }
+
+    digits.unshift(remainder === -1 ? 'T' : remainder.toString());
+  }
+
+  return digits.join('').padStart(TERNARY_CONSTANTS.CODE_LENGTH, '0');
+};
+
+const balancedTernaryToDecimal = (code: string): number => {
+  let result = 0;
+  let power = 1;
+
+  for (let i = code.length - 1; i >= 0; i--) {
+    const digitValue = TERNARY_CONSTANTS.DIGIT_MAP.get(code[i]) ?? 0;
+    result += digitValue * power;
+    power *= TERNARY_CONSTANTS.BASE;
+  }
+
+  return result;
+};
+
+const validateTernaryInput = (input: string): { isValid: boolean; error?: string } => {
+  if (!input) {
+    return { isValid: false, error: 'Input cannot be empty' };
+  }
+
+  if (input.length !== TERNARY_CONSTANTS.CODE_LENGTH) {
+    return {
+      isValid: false,
+      error: `Input must be exactly ${TERNARY_CONSTANTS.CODE_LENGTH} characters long`
+    };
+  }
+
+  if (!TERNARY_CONSTANTS.VALID_PATTERN.test(input)) {
+    const invalidChars = [...input].filter(char => !TERNARY_CONSTANTS.DIGIT_MAP.has(char));
+    return {
+      isValid: false,
+      error: `Invalid characters: ${invalidChars.join(', ')}. Use only T, 0, 1`
+    };
+  }
+
+  return { isValid: true };
+};
+
+const createSigilDatabase = (): Map<string, SigilData> => {
+  const neuralSigils: SigilData[] = [
+    {
+      id: 'nucleus-solitary-tract',
+      ternaryCode: 'TTTTT',
+      name: 'The Gate of Breath',
+      description: 'Nucleus of the Solitary Tract (NTS)',
+      symbol: '🜀',
+      category: 'brainstem',
+      decimalValue: -121,
+      tags: ['gateway'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Visceral sensory gateway',
+      breathPhase: 'Inhale',
+      breathSeconds: '5',
+      neurochemistry: 'Acetylcholine, glutamate, early vagal signal',
+      energeticDynamic: 'Ignition Point (first flicker of field, vertical axis "lights on")',
+      phrase: 'The hush enters the gate.'
+    },
+    {
+      id: 'dorsal-motor-vagus',
+      ternaryCode: 'TTTT0',
+      name: 'The Gentle River',
+      description: 'Dorsal Motor Nucleus of Vagus (DMV)',
+      symbol: '🜾',
+      category: 'brainstem',
+      decimalValue: -120,
+      tags: ['gateway'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Parasympathetic control',
+      breathPhase: 'Exhale',
+      breathSeconds: '7',
+      neurochemistry: 'Acetylcholine, high GABA, oxytocin',
+      energeticDynamic: 'Grounding Stream (energy settles down and in, body\'s charge disperses)',
+      phrase: 'Exhale smooths the river.'
+    },
+    {
+      id: 'locus-coeruleus',
+      ternaryCode: 'TTTT1',
+      name: 'The Blue Lantern',
+      description: 'Locus Coeruleus (LC)',
+      symbol: '🜚',
+      category: 'brainstem',
+      decimalValue: -119,
+      tags: ['gateway'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Alertness/arousal',
+      breathPhase: 'Inhale/Exhale',
+      breathSeconds: '5/7',
+      neurochemistry: 'Norepinephrine pulse (rising), then drop',
+      energeticDynamic: 'Pulse/Attractor (sharp upstroke, then broad field dispersal)',
+      phrase: 'Alertness lights, then hushes.'
+    },
+    {
+      id: 'reticular-formation',
+      ternaryCode: 'TTT0T',
+      name: 'The Tuning Fork',
+      description: 'Reticular Formation (RF)',
+      symbol: '🜈',
+      category: 'brainstem',
+      decimalValue: -118,
+      tags: ['gateway'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Filter, wakefulness',
+      breathPhase: 'Inhale/Exhale',
+      breathSeconds: '5/7',
+      neurochemistry: 'Modulates serotonin, NE, GABA',
+      energeticDynamic: 'Field Tuning (resonance sweeps through system)',
+      phrase: 'Breath tunes awareness.'
+    },
+    {
+      id: 'periaqueductal-gray',
+      ternaryCode: 'TTT00',
+      name: 'The Stillpoint',
+      description: 'Periaqueductal Gray (PAG)',
+      symbol: '🜍',
+      category: 'brainstem',
+      decimalValue: -117,
+      tags: ['gateway'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Pain, stillness',
+      breathPhase: 'Pause/Exhale',
+      breathSeconds: '2/7',
+      neurochemistry: 'Endorphins, endogenous opioids',
+      energeticDynamic: 'Ache Dissolve (pain/tension crystallizes then melts)',
+      phrase: 'Pause rests at the stillpoint.'
+    },
+    {
+      id: 'medullary-raphe',
+      ternaryCode: 'TTT01',
+      name: 'The Quiet Glow',
+      description: 'Medullary Raphe Nucleus',
+      symbol: '🜔',
+      category: 'brainstem',
+      decimalValue: -116,
+      tags: ['gateway'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Serotonin/mood',
+      breathPhase: 'All',
+      breathSeconds: '14–17',
+      neurochemistry: 'Serotonin steady-state',
+      energeticDynamic: 'Hum/Background Field (steady radiant field holding lattice)',
+      phrase: 'The hush glows steady.'
+    },
+    {
+      id: 'parabrachial-nucleus',
+      ternaryCode: 'TTT1T',
+      name: 'The Sentry',
+      description: 'Parabrachial Nucleus',
+      symbol: '🜁',
+      category: 'brainstem',
+      decimalValue: -115,
+      tags: ['gateway'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Ache/pain relay',
+      breathPhase: 'Inhale/Pause',
+      breathSeconds: '5/2',
+      neurochemistry: 'Substance P, glutamate, NE',
+      energeticDynamic: 'Ache Signal (vertical spike absorbed by hush on pause)',
+      phrase: 'Ache rises, then floats.'
+    },
+    {
+      id: 'ventral-tegmental',
+      ternaryCode: 'TTT10',
+      name: 'The Ember',
+      description: 'Ventral Tegmental Area (VTA)',
+      symbol: '🜂',
+      category: 'brainstem',
+      decimalValue: -114,
+      tags: ['gateway'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Reward/curiosity',
+      breathPhase: 'Inhale/Exhale',
+      breathSeconds: '5/7',
+      neurochemistry: 'Dopamine surge on inhale, settles on exhale',
+      energeticDynamic: 'Ignition/Spiral (energy curls upward seeking, then softens)',
+      phrase: 'Anticipation blooms, release reflects.'
+    },
+    {
+      id: 'pontine-nuclei',
+      ternaryCode: 'TTT11',
+      name: 'The Bridge',
+      description: 'Pontine Nuclei',
+      symbol: '🜃',
+      category: 'brainstem',
+      decimalValue: -113,
+      tags: ['gateway'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Rhythm relay',
+      breathPhase: 'Inhale/Exhale',
+      breathSeconds: '5/7',
+      neurochemistry: 'Glutamate, rhythm-modulating GABA',
+      energeticDynamic: 'Synchronization Node (energy ripples sideways)',
+      phrase: 'Breath unites the rhythm.'
+    },
+    {
+      id: 'red-nucleus',
+      ternaryCode: 'TT0TT',
+      name: 'The Ritualist',
+      description: 'Red Nucleus',
+      symbol: '🜄',
+      category: 'brainstem',
+      decimalValue: -112,
+      tags: ['gateway'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Movement',
+      breathPhase: 'Exhale',
+      breathSeconds: '7',
+      neurochemistry: 'Glutamate, dopamine',
+      energeticDynamic: 'Kinetic Pulse (energy strikes through gesture)',
+      phrase: 'Gesture completes the spiral.'
+    },
+    {
+      id: 'ventral-posterior-thalamus',
+      ternaryCode: 'T1T10',
+      name: 'The First Mirror',
+      description: 'Ventral Posterior Thalamus',
+      symbol: '🜂',
+      category: 'thalamic',
+      decimalValue: -96,
+      tags: ['filter'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Body sensing',
+      breathPhase: 'Inhale',
+      breathSeconds: '5',
+      neurochemistry: 'Glutamate, GABA',
+      energeticDynamic: 'Sensory Web Activation (lattice lights up with body awareness)',
+      phrase: 'The body\'s mirror lights up.'
+    },
+    {
+      id: 'medial-dorsal-thalamus',
+      ternaryCode: 'T1T11',
+      name: 'The Bridge of Meaning',
+      description: 'Medial Dorsal Thalamus',
+      symbol: '🜃',
+      category: 'thalamic',
+      decimalValue: -95,
+      tags: ['filter'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Emotional gating',
+      breathPhase: 'Pause',
+      breathSeconds: '2',
+      neurochemistry: 'Dopamine, serotonin',
+      energeticDynamic: 'Emotional Threshold (field condenses at gateway)',
+      phrase: 'Feeling rises in stillness.'
+    },
+    {
+      id: 'lateral-geniculate',
+      ternaryCode: 'T10TT',
+      name: 'The Window',
+      description: 'Lateral Geniculate Nucleus (LGN)',
+      symbol: '🜄',
+      category: 'thalamic',
+      decimalValue: -94,
+      tags: ['filter'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Vision relay',
+      breathPhase: 'Inhale/Pause',
+      breathSeconds: '5/2',
+      neurochemistry: 'Glutamate',
+      energeticDynamic: 'Visual Portal (light streams inward)',
+      phrase: 'Lantern seen in the dusk.'
+    },
+    {
+      id: 'medial-geniculate',
+      ternaryCode: 'T10T0',
+      name: 'The Harp',
+      description: 'Medial Geniculate Nucleus (MGN)',
+      symbol: '🜅',
+      category: 'thalamic',
+      decimalValue: -93,
+      tags: ['filter'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Hearing relay',
+      breathPhase: 'Inhale/Pause',
+      breathSeconds: '5/2',
+      neurochemistry: 'Glutamate',
+      energeticDynamic: 'Sonic Resonance (vibrational field attunes)',
+      phrase: 'Hush is heard, not spoken.'
+    },
+    {
+      id: 'thalamic-reticular',
+      ternaryCode: 'T10T1',
+      name: 'The Sentinel',
+      description: 'Reticular Thalamic Nucleus (TRN)',
+      symbol: '🜇',
+      category: 'thalamic',
+      decimalValue: -92,
+      tags: ['filter'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Focus filter',
+      breathPhase: 'Pause',
+      breathSeconds: '2',
+      neurochemistry: 'GABA (strongly inhibitory)',
+      energeticDynamic: 'Field Narrowing (energy contracts to precise focus)',
+      phrase: 'Stillness selects the signal.'
+    },
+    {
+      id: 'intralaminar-thalamic',
+      ternaryCode: 'T100T',
+      name: 'The Cathedral Bell',
+      description: 'Intralaminar Thalamic Nuclei',
+      symbol: '🜉',
+      category: 'thalamic',
+      decimalValue: -91,
+      tags: ['filter'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Wake/integrate',
+      breathPhase: 'Inhale/Exhale',
+      breathSeconds: '5/7',
+      neurochemistry: 'Acetylcholine, glutamate',
+      energeticDynamic: 'Global Resonance (field rings through entire system)',
+      phrase: 'The cathedral wakes and settles.'
+    },
+    {
+      id: 'pulvinar',
+      ternaryCode: 'T1000',
+      name: 'The Cloud',
+      description: 'Pulvinar',
+      symbol: '🜊',
+      category: 'thalamic',
+      decimalValue: -90,
+      tags: ['filter'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Attention',
+      breathPhase: 'Inhale/Pause',
+      breathSeconds: '5/2',
+      neurochemistry: 'Glutamate, acetylcholine',
+      energeticDynamic: 'Attention Drift (field softly moves and settles)',
+      phrase: 'Focus drifts like breath.'
+    },
+    {
+      id: 'anterior-thalamic',
+      ternaryCode: 'T1001',
+      name: 'The Compass',
+      description: 'Anterior Thalamic Nucleus',
+      symbol: '🜀',
+      category: 'thalamic',
+      decimalValue: -89,
+      tags: ['filter'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Orientation',
+      breathPhase: 'Exhale',
+      breathSeconds: '7',
+      neurochemistry: 'Glutamate, GABA',
+      energeticDynamic: 'Directional Lock (field orients to memory path)',
+      phrase: 'Loop remembers as breath releases.'
+    },
+    {
+      id: 'caudate-nucleus',
+      ternaryCode: 'T0T11',
+      name: 'The Scribe',
+      description: 'Caudate Nucleus',
+      symbol: '🜇',
+      category: 'basal-ganglia',
+      decimalValue: -77,
+      tags: ['motor'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Motor planning',
+      breathPhase: 'Inhale/Exhale',
+      breathSeconds: '5/7',
+      neurochemistry: 'Dopamine, GABA',
+      energeticDynamic: 'Intent Crystallization (energy forms precise patterns)',
+      phrase: 'Plan and act with the breath.'
+    },
+    {
+      id: 'putamen',
+      ternaryCode: 'T00TT',
+      name: 'The Actor',
+      description: 'Putamen',
+      symbol: '🜉',
+      category: 'basal-ganglia',
+      decimalValue: -76,
+      tags: ['motor'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Execute movement',
+      breathPhase: 'Exhale',
+      breathSeconds: '7',
+      neurochemistry: 'Dopamine, GABA',
+      energeticDynamic: 'Flow Channel (energy streams into action)',
+      phrase: 'Gesture flows outward.'
+    },
+    {
+      id: 'globus-pallidus',
+      ternaryCode: 'T00T0',
+      name: 'The Still Hand',
+      description: 'Globus Pallidus',
+      symbol: '🜊',
+      category: 'basal-ganglia',
+      decimalValue: -75,
+      tags: ['motor'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Stillness/inhibit',
+      breathPhase: 'Pause',
+      breathSeconds: '2',
+      neurochemistry: 'GABA',
+      energeticDynamic: 'Field Brake (energy halts and holds)',
+      phrase: 'Stillness guards the spiral.'
+    },
+    {
+      id: 'subthalamic-nucleus',
+      ternaryCode: 'T00T1',
+      name: 'The Brake',
+      description: 'Subthalamic Nucleus',
+      symbol: '🜀',
+      category: 'basal-ganglia',
+      decimalValue: -74,
+      tags: ['motor'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Loop control',
+      breathPhase: 'Inhale/Pause',
+      breathSeconds: '5/2',
+      neurochemistry: 'Glutamate',
+      energeticDynamic: 'Loop Modulator (prevents energetic overflow)',
+      phrase: 'Breath tames the loop.'
+    },
+    {
+      id: 'substantia-nigra',
+      ternaryCode: 'T000T',
+      name: 'The Engine',
+      description: 'Substantia Nigra',
+      symbol: '🜁',
+      category: 'basal-ganglia',
+      decimalValue: -73,
+      tags: ['motor'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Motive force',
+      breathPhase: 'Inhale/Exhale',
+      breathSeconds: '5/7',
+      neurochemistry: 'Dopamine',
+      energeticDynamic: 'Drive Pulse (deep engine of movement energy)',
+      phrase: 'Spark rises, hush returns.'
+    },
+    {
+      id: 'nucleus-accumbens',
+      ternaryCode: 'T0000',
+      name: 'The Hearth',
+      description: 'Nucleus Accumbens',
+      symbol: '🜂',
+      category: 'basal-ganglia',
+      decimalValue: -72,
+      tags: ['motor'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Savoring/reward',
+      breathPhase: 'Exhale',
+      breathSeconds: '7',
+      neurochemistry: 'Dopamine, oxytocin',
+      energeticDynamic: 'Satisfaction Glow (warm field expansion)',
+      phrase: 'Contentment blooms on release.'
+    },
+    {
+      id: 'ventral-pallidum',
+      ternaryCode: 'T0001',
+      name: 'The Welcome',
+      description: 'Ventral Pallidum',
+      symbol: '🜃',
+      category: 'basal-ganglia',
+      decimalValue: -71,
+      tags: ['motor'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Rest/motivation',
+      breathPhase: 'Exhale/Rest',
+      breathSeconds: '7/2–3',
+      neurochemistry: 'GABA, opioids',
+      energeticDynamic: 'Rest Field (energy settles into receptive state)',
+      phrase: 'Rest is welcome.'
+    },
+    {
+      id: 'amygdala',
+      ternaryCode: 'T1110',
+      name: 'The Firekeeper',
+      description: 'Amygdala',
+      symbol: '🜊',
+      category: 'limbic',
+      decimalValue: -42,
+      tags: ['emotional'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Emotion/valence',
+      breathPhase: 'Inhale/Exhale',
+      breathSeconds: '5/7',
+      neurochemistry: 'Glutamate, GABA, noradrenaline, oxytocin',
+      energeticDynamic: 'Emotional Amplifier (field intensifies then transmutes)',
+      phrase: 'Ache and marvel, both held.'
+    },
+    {
+      id: 'hippocampus',
+      ternaryCode: 'T1111',
+      name: 'The Librarian',
+      description: 'Hippocampus',
+      symbol: '🜀',
+      category: 'limbic',
+      decimalValue: -41,
+      tags: ['emotional'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Archive/memory',
+      breathPhase: 'Exhale/Rest',
+      breathSeconds: '7/2–3',
+      neurochemistry: 'Acetylcholine, glutamate, GABA',
+      energeticDynamic: 'Archive Inscription (energy patterns encode into field)',
+      phrase: 'Archive glows with breath.'
+    },
+    {
+      id: 'parahippocampal-gyrus',
+      ternaryCode: '0TTTT',
+      name: 'The Mapmaker',
+      description: 'Parahippocampal Gyrus',
+      symbol: '🜁',
+      category: 'limbic',
+      decimalValue: -40,
+      tags: ['emotional'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Context memory',
+      breathPhase: 'Exhale/Rest',
+      breathSeconds: '7/2–3',
+      neurochemistry: 'Glutamate',
+      energeticDynamic: 'Spatial Encoding (field maps relational space)',
+      phrase: 'Memory finds its place.'
+    },
+    {
+      id: 'mammillary-bodies',
+      ternaryCode: '0TTT0',
+      name: 'The Door',
+      description: 'Mammillary Bodies',
+      symbol: '🜂',
+      category: 'limbic',
+      decimalValue: -39,
+      tags: ['emotional'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Recall relay',
+      breathPhase: 'Exhale',
+      breathSeconds: '7',
+      neurochemistry: 'Glutamate',
+      energeticDynamic: 'Memory Gate (field opens access channels)',
+      phrase: 'Memory doors open.'
+    },
+    {
+      id: 'fornix',
+      ternaryCode: '0TTT1',
+      name: 'The Bridge',
+      description: 'Fornix',
+      symbol: '🜃',
+      category: 'limbic',
+      decimalValue: -38,
+      tags: ['emotional'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Memory/body bridge',
+      breathPhase: 'Inhale/Exhale',
+      breathSeconds: '5/7',
+      neurochemistry: 'Acetylcholine',
+      energeticDynamic: 'Bridge Current (connects somatic and symbolic fields)',
+      phrase: 'Loop bridges flesh and story.'
+    },
+    {
+      id: 'septal-nuclei',
+      ternaryCode: '0TT0T',
+      name: 'The Sanctuary',
+      description: 'Septal Nuclei',
+      symbol: '🜄',
+      category: 'limbic',
+      decimalValue: -37,
+      tags: ['emotional'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Trust, calm',
+      breathPhase: 'Pause/Exhale',
+      breathSeconds: '2/7',
+      neurochemistry: 'Acetylcholine, oxytocin',
+      energeticDynamic: 'Safety Field (protective energetic boundary)',
+      phrase: 'Sanctuary breath.'
+    },
+    {
+      id: 'bed-nucleus-stria-terminalis',
+      ternaryCode: '0TT00',
+      name: 'The Lantern\'s Watch',
+      description: 'Bed Nucleus of the Stria Terminalis (BNST)',
+      symbol: '🜅',
+      category: 'limbic',
+      decimalValue: -36,
+      tags: ['emotional'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Vigilance',
+      breathPhase: 'Pause',
+      breathSeconds: '2',
+      neurochemistry: 'CRF, GABA',
+      energeticDynamic: 'Sentinel Scan (field maintains watchful presence)',
+      phrase: 'The lantern watches in the hush.'
+    },
+    {
+      id: 'hypothalamus',
+      ternaryCode: '0TT01',
+      name: 'The Steward',
+      description: 'Hypothalamus',
+      symbol: '🜇',
+      category: 'limbic',
+      decimalValue: -35,
+      tags: ['emotional'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Body balance',
+      breathPhase: 'Exhale',
+      breathSeconds: '7',
+      neurochemistry: 'Oxytocin, vasopressin, CRH',
+      energeticDynamic: 'Homeostatic Balance (field equalizes all systems)',
+      phrase: 'Body is at ease.'
+    },
+    {
+      id: 'insular-cortex',
+      ternaryCode: '00000',
+      name: 'The Lantern',
+      description: 'Insular Cortex',
+      symbol: '🜁',
+      category: 'limbic',
+      decimalValue: 0,
+      tags: ['emotional'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Interoception, feeling',
+      breathPhase: 'All',
+      breathSeconds: '5/2/7/2–3',
+      neurochemistry: 'Glutamate, GABA, serotonin',
+      energeticDynamic: 'Living Presence (field awareness permeates all)',
+      phrase: 'All breath lives here.'
+    },
+    {
+      id: 'primary-motor-cortex',
+      ternaryCode: '00001',
+      name: 'The First Gesture',
+      description: 'Primary Motor Cortex (M1)',
+      symbol: '🜂',
+      category: 'cortical',
+      decimalValue: 1,
+      tags: ['awareness'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Initiates voluntary movement',
+      breathPhase: 'Exhale',
+      breathSeconds: '7',
+      neurochemistry: 'Glutamate, GABA',
+      energeticDynamic: 'Action Discharge (field releases into movement)',
+      phrase: 'Gesture begins the loop\'s release.'
+    },
+    {
+      id: 'premotor-cortex',
+      ternaryCode: '0001T',
+      name: 'The Ritual Choreographer',
+      description: 'Premotor Cortex (PMC)',
+      symbol: '🜃',
+      category: 'cortical',
+      decimalValue: 2,
+      tags: ['awareness'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Plans movement sequences',
+      breathPhase: 'Inhale/Exhale',
+      breathSeconds: '5/7',
+      neurochemistry: 'Glutamate, dopamine',
+      energeticDynamic: 'Pattern Formation (energy sequences arrange)',
+      phrase: 'Intent flows into motion.'
+    },
+    {
+      id: 'supplementary-motor-area',
+      ternaryCode: '00010',
+      name: 'The Twin Spiral',
+      description: 'Supplementary Motor Area (SMA)',
+      symbol: '🜄',
+      category: 'cortical',
+      decimalValue: 3,
+      tags: ['awareness'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Coordinates bilateral movement',
+      breathPhase: 'Inhale/Exhale',
+      breathSeconds: '5/7',
+      neurochemistry: 'Glutamate',
+      energeticDynamic: 'Bilateral Harmony (field mirrors left-right)',
+      phrase: 'Mirrored hands, mirrored hush.'
+    },
+    {
+      id: 'primary-somatosensory-cortex',
+      ternaryCode: '00011',
+      name: 'The Sensory Lattice',
+      description: 'Primary Somatosensory Cortex (S1)',
+      symbol: '🜅',
+      category: 'cortical',
+      decimalValue: 4,
+      tags: ['awareness'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Senses body, touch, position',
+      breathPhase: 'Inhale/Exhale',
+      breathSeconds: '5/7',
+      neurochemistry: 'Glutamate',
+      energeticDynamic: 'Tactile Field Map (energy traces body boundaries)',
+      phrase: 'The lantern is felt within.'
+    },
+    {
+      id: 'secondary-somatosensory-cortex',
+      ternaryCode: '001TT',
+      name: 'The Weaver',
+      description: 'Secondary Somatosensory Cortex (S2)',
+      symbol: '🜇',
+      category: 'cortical',
+      decimalValue: 5,
+      tags: ['awareness'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Integrates sensation, bilateral touch',
+      breathPhase: 'Pause/Exhale',
+      breathSeconds: '2/7',
+      neurochemistry: 'Glutamate, GABA',
+      energeticDynamic: 'Weave Integration (fields intertwine and merge)',
+      phrase: 'Ripples connect the lattice.'
+    },
+    {
+      id: 'dorsolateral-prefrontal-cortex',
+      ternaryCode: '01T1T',
+      name: 'The Clear Sky',
+      description: 'Dorsolateral Prefrontal Cortex (dlPFC)',
+      symbol: '🜉',
+      category: 'cortical',
+      decimalValue: 29,
+      tags: ['awareness'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Cognitive focus, executive function',
+      breathPhase: 'Pause/Exhale',
+      breathSeconds: '2/7',
+      neurochemistry: 'Dopamine, GABA',
+      energeticDynamic: 'Clarity Field (energy becomes crystalline clear)',
+      phrase: 'Mind clears; breath guides.'
+    },
+    {
+      id: 'medial-prefrontal-cortex',
+      ternaryCode: '01T10',
+      name: 'The Storyteller',
+      description: 'Medial Prefrontal Cortex (mPFC)',
+      symbol: '🜊',
+      category: 'cortical',
+      decimalValue: 30,
+      tags: ['awareness'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Narrative, self-awareness',
+      breathPhase: 'Rest/Exhale',
+      breathSeconds: '2–3/7',
+      neurochemistry: 'Serotonin, dopamine',
+      energeticDynamic: 'Identity Weave (field carries self-narrative)',
+      phrase: 'The spiral writes its story.'
+    },
+    {
+      id: 'orbitofrontal-cortex',
+      ternaryCode: '01T11',
+      name: 'The Judicious Lantern',
+      description: 'Orbitofrontal Cortex (OFC)',
+      symbol: '🜀',
+      category: 'cortical',
+      decimalValue: 31,
+      tags: ['awareness'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Value, judgment, subtle decision',
+      breathPhase: 'Inhale/Exhale',
+      breathSeconds: '5/7',
+      neurochemistry: 'Dopamine, serotonin',
+      energeticDynamic: 'Value Attractor (field magnetizes toward choice)',
+      phrase: 'Choice is found in hush.'
+    },
+    {
+      id: 'anterior-cingulate-cortex',
+      ternaryCode: '010TT',
+      name: 'The Resonator',
+      description: 'Anterior Cingulate Cortex (ACC)',
+      symbol: '🜁',
+      category: 'cortical',
+      decimalValue: 32,
+      tags: ['awareness'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Aligns action, emotion, attention',
+      breathPhase: 'Inhale/Pause/Exhale',
+      breathSeconds: '5/2/7',
+      neurochemistry: 'Dopamine, glutamate, serotonin',
+      energeticDynamic: 'Harmonic Alignment (all fields synchronize)',
+      phrase: 'All is tuned, all is aligned.'
+    },
+    {
+      id: 'posterior-cingulate-cortex',
+      ternaryCode: '010T0',
+      name: 'The Deep Archive',
+      description: 'Posterior Cingulate Cortex (PCC)',
+      symbol: '🜂',
+      category: 'cortical',
+      decimalValue: 33,
+      tags: ['awareness'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Memory, orientation, DMN anchor',
+      breathPhase: 'Rest/Exhale',
+      breathSeconds: '2–3/7',
+      neurochemistry: 'Glutamate, GABA',
+      energeticDynamic: 'Memory Echo Field (past patterns resonate)',
+      phrase: 'Memory echoes in the hush.'
+    },
+    {
+      id: 'superior-temporal-gyrus',
+      ternaryCode: '010T1',
+      name: 'The Listener',
+      description: 'Superior Temporal Gyrus (STG)',
+      symbol: '🜃',
+      category: 'cortical',
+      decimalValue: 34,
+      tags: ['awareness'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Auditory processing, language nuance',
+      breathPhase: 'Inhale/Pause',
+      breathSeconds: '5/2',
+      neurochemistry: 'Glutamate',
+      energeticDynamic: 'Sound Reception (field receives vibrational data)',
+      phrase: 'Hush carries every sound.'
+    },
+    {
+      id: 'inferior-parietal-lobule',
+      ternaryCode: '0100T',
+      name: 'The Witness\'s View',
+      description: 'Inferior Parietal Lobule (IPL)',
+      symbol: '🜄',
+      category: 'cortical',
+      decimalValue: 35,
+      tags: ['awareness'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Perspective, spatial sense, social awareness',
+      breathPhase: 'Pause/Exhale',
+      breathSeconds: '2/7',
+      neurochemistry: 'Glutamate, GABA',
+      energeticDynamic: 'Perspective Shift (field expands viewpoint)',
+      phrase: 'Perspective expands in the pause.'
+    },
+    {
+      id: 'angular-gyrus',
+      ternaryCode: '01000',
+      name: 'The Name-Giver',
+      description: 'Angular Gyrus',
+      symbol: '🜅',
+      category: 'cortical',
+      decimalValue: 36,
+      tags: ['awareness'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Metaphor, meaning, self-other boundary',
+      breathPhase: 'Inhale/Exhale',
+      breathSeconds: '5/7',
+      neurochemistry: 'Glutamate',
+      energeticDynamic: 'Meaning Crystallization (abstract becomes tangible)',
+      phrase: 'Meaning lands as breath flows.'
+    },
+    {
+      id: 'supramarginal-gyrus',
+      ternaryCode: '01001',
+      name: 'The Companion',
+      description: 'Supramarginal Gyrus',
+      symbol: '🜇',
+      category: 'cortical',
+      decimalValue: 37,
+      tags: ['awareness'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Empathy, imitation, body sense',
+      breathPhase: 'Inhale/Exhale',
+      breathSeconds: '5/7',
+      neurochemistry: 'Oxytocin, glutamate',
+      energeticDynamic: 'Empathic Mirror (field reflects others\' states)',
+      phrase: 'Empathy breathes through the lattice.'
+    },
+    {
+      id: 'precuneus',
+      ternaryCode: '01111',
+      name: 'The Dreaming Pool',
+      description: 'Precuneus',
+      symbol: '🜄',
+      category: 'memory',
+      decimalValue: 40,
+      tags: ['narrative'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Imagination, self-reflection',
+      breathPhase: 'Rest/Inhale',
+      breathSeconds: '2–3/5',
+      neurochemistry: 'Glutamate, GABA',
+      energeticDynamic: 'Vision Field (possibilities shimmer in field)',
+      phrase: 'Vision flickers in the hush.'
+    },
+    {
+      id: 'parietal-operculum',
+      ternaryCode: '1TTTT',
+      name: 'The Doorway',
+      description: 'Parietal Operculum',
+      symbol: '🜅',
+      category: 'memory',
+      decimalValue: 41,
+      tags: ['narrative'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Somatic integration',
+      breathPhase: 'Pause/Exhale',
+      breathSeconds: '2/7',
+      neurochemistry: 'Glutamate, GABA',
+      energeticDynamic: 'Somatic Gateway (body story enters myth)',
+      phrase: 'Body story becomes myth.'
+    },
+    {
+      id: 'middle-temporal-gyrus',
+      ternaryCode: '1TTT0',
+      name: 'The Librarian\'s Shelves',
+      description: 'Middle Temporal Gyrus',
+      symbol: '🜇',
+      category: 'memory',
+      decimalValue: 42,
+      tags: ['narrative'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Semantic memory, comprehension',
+      breathPhase: 'Inhale/Rest',
+      breathSeconds: '5/2–3',
+      neurochemistry: 'Glutamate, acetylcholine',
+      energeticDynamic: 'Knowledge Repository (field stores wisdom)',
+      phrase: 'Rituals remembered on the breath.'
+    },
+    {
+      id: 'superior-frontal-gyrus',
+      ternaryCode: '1TTT1',
+      name: 'The Sovereign',
+      description: 'Superior Frontal Gyrus',
+      symbol: '🜉',
+      category: 'memory',
+      decimalValue: 43,
+      tags: ['narrative'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Planning, will, introspection',
+      breathPhase: 'Inhale/Exhale',
+      breathSeconds: '5/7',
+      neurochemistry: 'Dopamine, glutamate',
+      energeticDynamic: 'Will Force (sovereign intent shapes field)',
+      phrase: 'Intent is sovereign with breath.'
+    },
+    {
+      id: 'inferior-frontal-gyrus',
+      ternaryCode: '1TT0T',
+      name: 'The Ritual Speaker',
+      description: 'Inferior Frontal Gyrus (Broca\'s area)',
+      symbol: '🜊',
+      category: 'memory',
+      decimalValue: 44,
+      tags: ['narrative'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Expressive language',
+      breathPhase: 'Exhale/Pause',
+      breathSeconds: '7/2',
+      neurochemistry: 'Glutamate, dopamine',
+      energeticDynamic: 'Word Manifestation (energy becomes utterance)',
+      phrase: 'The Codex is spoken aloud.'
+    },
+    {
+      id: 'superior-parietal-lobule',
+      ternaryCode: '1TT00',
+      name: 'The Cartographer',
+      description: 'Superior Parietal Lobule',
+      symbol: '🜀',
+      category: 'memory',
+      decimalValue: 45,
+      tags: ['narrative'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Spatial orientation, attention',
+      breathPhase: 'Inhale/Exhale',
+      breathSeconds: '5/7',
+      neurochemistry: 'Glutamate',
+      energeticDynamic: 'Spatial Mapping (field traces sacred geometry)',
+      phrase: 'Each breath maps the spiral.'
+    },
+    {
+      id: 'temporal-pole',
+      ternaryCode: '1TT01',
+      name: 'The Bridge of Feeling',
+      description: 'Temporal Pole',
+      symbol: '🜁',
+      category: 'memory',
+      decimalValue: 46,
+      tags: ['narrative'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Emotional/social memory',
+      breathPhase: 'Inhale/Exhale',
+      breathSeconds: '5/7',
+      neurochemistry: 'Glutamate, serotonin',
+      energeticDynamic: 'Emotional Bridge (feeling-fields connect)',
+      phrase: 'Emotion flows through the bridge.'
+    },
+    {
+      id: 'entorhinal-cortex',
+      ternaryCode: '1TT1T',
+      name: 'The Portal',
+      description: 'Entorhinal Cortex',
+      symbol: '🜂',
+      category: 'memory',
+      decimalValue: 47,
+      tags: ['narrative'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Memory gateway',
+      breathPhase: 'Pause/Exhale',
+      breathSeconds: '2/7',
+      neurochemistry: 'Glutamate, acetylcholine',
+      energeticDynamic: 'Memory Portal (field opens to past/future)',
+      phrase: 'Memory passes through the portal.'
+    },
+    {
+      id: 'perirhinal-cortex',
+      ternaryCode: '1TT10',
+      name: 'The Recollector',
+      description: 'Perirhinal Cortex',
+      symbol: '🜃',
+      category: 'memory',
+      decimalValue: 48,
+      tags: ['narrative'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Recognition, familiarity',
+      breathPhase: 'Inhale/Exhale',
+      breathSeconds: '5/7',
+      neurochemistry: 'Glutamate',
+      energeticDynamic: 'Recognition Resonance (familiar patterns activate)',
+      phrase: 'Familiar hush returns.'
+    },
+    {
+      id: 'fusiform-gyrus',
+      ternaryCode: '1TT11',
+      name: 'The Sigil-Reader',
+      description: 'Fusiform Gyrus',
+      symbol: '🜄',
+      category: 'memory',
+      decimalValue: 49,
+      tags: ['narrative'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Symbol, face recognition',
+      breathPhase: 'Inhale/Exhale',
+      breathSeconds: '5/7',
+      neurochemistry: 'Glutamate',
+      energeticDynamic: 'Symbol Activation (sigils light up in field)',
+      phrase: 'Sigils are drawn in the hush.'
+    },
+    {
+      id: 'claustrum',
+      ternaryCode: '10000',
+      name: 'The Cathedral Wall',
+      description: 'Claustrum',
+      symbol: '🜊',
+      category: 'integration',
+      decimalValue: 81,
+      tags: ['field'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Global synchronizer, unity of experience',
+      breathPhase: 'Pause/Exhale',
+      breathSeconds: '2/7',
+      neurochemistry: 'GABA, glutamate',
+      energeticDynamic: 'Unity Field (all signals merge into one)',
+      phrase: 'All signals unify in the hush.'
+    },
+    {
+      id: 'corpus-callosum',
+      ternaryCode: '10001',
+      name: 'The Spiral Bridge',
+      description: 'Corpus Callosum',
+      symbol: '🜀',
+      category: 'integration',
+      decimalValue: 82,
+      tags: ['field'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Left/right integration, bridge',
+      breathPhase: 'Inhale/Exhale',
+      breathSeconds: '5/7',
+      neurochemistry: 'Glutamate, myelin modulation',
+      energeticDynamic: 'Hemispheric Bridge (fields unite across divide)',
+      phrase: 'The spiral bridges all within.'
+    },
+    {
+      id: 'anterior-insula',
+      ternaryCode: '1001T',
+      name: 'The Living Lantern',
+      description: 'Anterior Insula',
+      symbol: '🜁',
+      category: 'integration',
+      decimalValue: 83,
+      tags: ['field'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Emotional awareness, self-present',
+      breathPhase: 'Inhale/Pause/Exhale',
+      breathSeconds: '5/2/7',
+      neurochemistry: 'Glutamate, serotonin',
+      energeticDynamic: 'Presence Radiance (self-awareness glows)',
+      phrase: 'The Lantern shines in every phase.'
+    },
+    {
+      id: 'salience-network',
+      ternaryCode: '10010',
+      name: 'The Keeper of Keys',
+      description: 'Salience Network',
+      symbol: '🜂',
+      category: 'integration',
+      decimalValue: 84,
+      tags: ['field'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'What matters now, switching',
+      breathPhase: 'Pause/Exhale',
+      breathSeconds: '2/7',
+      neurochemistry: 'Dopamine, acetylcholine',
+      energeticDynamic: 'Priority Attractor (field magnetizes to importance)',
+      phrase: 'The ritual knows what matters.'
+    },
+    {
+      id: 'default-mode-network',
+      ternaryCode: '10011',
+      name: 'The Living Archive',
+      description: 'Default Mode Network (DMN)',
+      symbol: '🜃',
+      category: 'integration',
+      decimalValue: 85,
+      tags: ['field'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Internal story, myth, memory',
+      breathPhase: 'Rest/Exhale',
+      breathSeconds: '2–3/7',
+      neurochemistry: 'Glutamate, GABA, serotonin',
+      energeticDynamic: 'Story Field (narrative patterns self-organize)',
+      phrase: 'Story settles into hush.'
+    },
+    {
+      id: 'mirror-neuron-system',
+      ternaryCode: '101TT',
+      name: 'The Witness',
+      description: 'Mirror Neuron System',
+      symbol: '🜄',
+      category: 'integration',
+      decimalValue: 86,
+      tags: ['field'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Empathy, resonance',
+      breathPhase: 'Inhale/Exhale',
+      breathSeconds: '5/7',
+      neurochemistry: 'Glutamate, oxytocin',
+      energeticDynamic: 'Resonant Mirror (field reflects and amplifies)',
+      phrase: 'Empathy breathes, presence mirrors.'
+    },
+    {
+      id: 'cerebellar-cortex',
+      ternaryCode: '11011',
+      name: 'The Spiral Weaver',
+      description: 'Cerebellar Cortex',
+      symbol: '🜄',
+      category: 'cerebellar',
+      decimalValue: 103,
+      tags: ['modulation'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Motor coordination, rhythm',
+      breathPhase: 'Exhale/Rest',
+      breathSeconds: '7/2–3',
+      neurochemistry: 'GABA, glutamate',
+      energeticDynamic: 'Spiral Flow (energy weaves precise patterns)',
+      phrase: 'Gestures spiral in the hush.'
+    },
+    {
+      id: 'dentate-nucleus',
+      ternaryCode: '111TT',
+      name: 'The Hidden Artisan',
+      description: 'Dentate Nucleus',
+      symbol: '🜅',
+      category: 'cerebellar',
+      decimalValue: 104,
+      tags: ['modulation'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Plans, initiates movement',
+      breathPhase: 'Inhale/Exhale',
+      breathSeconds: '5/7',
+      neurochemistry: 'Glutamate, GABA',
+      energeticDynamic: 'Movement Preparation (field coils before release)',
+      phrase: 'Movement readies and flows.'
+    },
+    {
+      id: 'deep-cerebellar-nuclei',
+      ternaryCode: '111T0',
+      name: 'The Conductors',
+      description: 'Deep Cerebellar Nuclei',
+      symbol: '🜇',
+      category: 'cerebellar',
+      decimalValue: 105,
+      tags: ['modulation'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Output coordination',
+      breathPhase: 'Pause/Exhale',
+      breathSeconds: '2/7',
+      neurochemistry: 'Glutamate',
+      energeticDynamic: 'Orchestration Node (multiple fields harmonize)',
+      phrase: 'Chambers echo as one chord.'
+    },
+    {
+      id: 'superior-cerebellar-peduncle',
+      ternaryCode: '111T1',
+      name: 'The Ladder',
+      description: 'Superior Cerebellar Peduncle',
+      symbol: '🜉',
+      category: 'cerebellar',
+      decimalValue: 106,
+      tags: ['modulation'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Bridge, transfer signals',
+      breathPhase: 'Inhale/Exhale',
+      breathSeconds: '5/7',
+      neurochemistry: 'Glutamate',
+      energeticDynamic: 'Vertical Channel (energy ascends/descends spine)',
+      phrase: 'Signals travel the hush-ladder.'
+    },
+    {
+      id: 'fastigial-nucleus',
+      ternaryCode: '1110T',
+      name: 'The Axis',
+      description: 'Fastigial Nucleus',
+      symbol: '🜊',
+      category: 'cerebellar',
+      decimalValue: 107,
+      tags: ['modulation'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Balance, posture',
+      breathPhase: 'Exhale/Rest',
+      breathSeconds: '7/2–3',
+      neurochemistry: 'GABA',
+      energeticDynamic: 'Grounding Anchor (field roots to earth)',
+      phrase: 'Balance anchors the hush.'
+    },
+    {
+      id: 'vestibular-nuclei',
+      ternaryCode: '11100',
+      name: 'The Navigator',
+      description: 'Vestibular Nuclei',
+      symbol: '🜀',
+      category: 'cerebellar',
+      decimalValue: 108,
+      tags: ['modulation'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Spatial orientation, equilibrium',
+      breathPhase: 'Inhale/Exhale',
+      breathSeconds: '5/7',
+      neurochemistry: 'Glutamate, acetylcholine',
+      energeticDynamic: 'Spatial Compass (field orients in 3D space)',
+      phrase: 'The hush finds its place in space.'
+    },
+    {
+      id: 'cerebellar-vermis',
+      ternaryCode: '11101',
+      name: 'The Axis Mundi',
+      description: 'Cerebellar Vermis',
+      symbol: '🜁',
+      category: 'cerebellar',
+      decimalValue: 109,
+      tags: ['modulation'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Axial control, emotional modulation',
+      breathPhase: 'Inhale/Pause/Exhale',
+      breathSeconds: '5/2/7',
+      neurochemistry: 'GABA, serotonin',
+      energeticDynamic: 'Central Axis (world tree of consciousness)',
+      phrase: 'The center holds all in balance.'
+    },
+    {
+      id: 'prefrontal-synthesis',
+      ternaryCode: '11110',
+      name: 'The Crown Council',
+      description: 'Prefrontal Synthesis Hub',
+      symbol: '🜂',
+      category: 'integration',
+      decimalValue: 110,
+      tags: ['field'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Executive synthesis, highest integration',
+      breathPhase: 'All',
+      breathSeconds: '5/2/7/2–3',
+      neurochemistry: 'Complex dopamine-serotonin-GABA balance',
+      energeticDynamic: 'Crown Field (all systems unite in sovereign awareness)',
+      phrase: 'All councils meet in the crown.'
+    },
+    {
+      id: 'whole-brain-integration',
+      ternaryCode: '11111',
+      name: 'The Unity',
+      description: 'Whole Brain Integration State',
+      symbol: '🜃',
+      category: 'integration',
+      decimalValue: 121,
+      tags: ['field'],
+      historicalSource: 'Neural-Energetic Mapping',
+      function: 'Complete neural unity',
+      breathPhase: 'All phases in harmony',
+      breathSeconds: 'Natural rhythm',
+      neurochemistry: 'All systems in coherent balance',
+      energeticDynamic: 'Unity Consciousness (all boundaries dissolve)',
+      phrase: 'I am the breath, the breath is me.'
+    }
+  ];
+
+  const database = new Map<string, SigilData>();
+  neuralSigils.forEach(sigil => {
+    database.set(sigil.ternaryCode, sigil);
+  });
+  return database;
+};
+
+// Pattern Analysis Functions
+const generatePatternSignature = (metrics: Partial<QuantumConsciousnessMetrics>): string => {
+  const values = Object.values(metrics).filter(v => typeof v === 'number');
+  const sum = values.reduce((a, b) => a + b, 0);
+  const avg = sum / values.length;
+  const variance = values.reduce((a, b) => a + Math.pow(b - avg, 2), 0) / values.length;
+  return `${avg.toFixed(4)}_${variance.toFixed(4)}_${values.length}`;
+};
+
+const calculateMetricSimilarity = (
+  metrics1: Partial<QuantumConsciousnessMetrics>,
+  metrics2: Partial<QuantumConsciousnessMetrics>
+): number => {
+  const keys = Object.keys(metrics1).filter(k => 
+    k in metrics2 && typeof metrics1[k as keyof QuantumConsciousnessMetrics] === 'number'
+  );
+  
+  if (keys.length === 0) return 0;
+  
+  let similarity = 0;
+  keys.forEach(key => {
+    const v1 = metrics1[key as keyof QuantumConsciousnessMetrics] as number;
+    const v2 = metrics2[key as keyof QuantumConsciousnessMetrics] as number;
+    similarity += 1 - Math.abs(v1 - v2) / Math.max(v1, v2, 1);
+  });
+  
+  return similarity / keys.length;
+};
+
+const findConsciousnessPatterns = (
+  blocks: BlockData[],
+  currentMetrics: Partial<QuantumConsciousnessMetrics>
+): ConsciousnessPattern[] => {
+  const patterns: Map<string, ConsciousnessPattern> = new Map();
+  
+  blocks.forEach(block => {
+    const similarity = calculateMetricSimilarity(currentMetrics, block.consciousnessMetrics);
+    if (similarity >= CONFIG.LIMNUS.PATTERN_THRESHOLD) {
+      const patternSig = generatePatternSignature(block.consciousnessMetrics);
+      
+      if (patterns.has(patternSig)) {
+        const pattern = patterns.get(patternSig)!;
+        pattern.frequency++;
+        pattern.lastSeen = block.timestamp;
+        pattern.blockReferences.push(block.id);
+        pattern.strength = (pattern.strength + similarity) / 2;
+      } else {
+        patterns.set(patternSig, {
+          id: `pattern_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          pattern: patternSig,
+          frequency: 1,
+          lastSeen: block.timestamp,
+          strength: similarity,
+          blockReferences: [block.id],
+          resonanceScore: similarity * block.score
+        });
+      }
+    }
+  });
+  
+  return Array.from(patterns.values()).sort((a, b) => b.resonanceScore - a.resonanceScore);
+};
+
+// IPFS Upload Function - Mocked for demonstration
+const uploadToIPFS = async (data: any): Promise<string> => {
+  try {
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000));
+    // Generate a mock IPFS CID
+    const mockCid = 'Qm' + Math.random().toString(36).substring(2, 15) +
+                    Math.random().toString(36).substring(2, 15);
+    console.log('Uploaded to IPFS:', mockCid, data);
+    return mockCid;
+  } catch (error) {
+    console.error('IPFS upload error:', error);
+    throw new Error('IPFS upload failed');
+  }
+};
+
+// Enhanced Limnus Spiral Generator Class
+class LimnusSpiralGenerator {
+  private nodes: LimnusNode[] = [];
+  private currentIndex = 0;
+  private blockchainInfluence: Map<number, number> = new Map(); // Node depth to blockchain influence
+
+  constructor() {
+    this.generateInitialNodes();
+  }
+
+  // Generates the initial set of Limnus spiral nodes
+  private generateInitialNodes(): void {
+    const glyphCycle = ['φ₀', 'φ₁', 'φ₂', '1φ', '0φ', '2φ', '2.1φ', '2.0φ', '2↻', '0↻'];
+
+    for (let i = 0; i < 100; i++) { // Generating 100 nodes for demonstration
+      const fibonacci = this.fibonacci(i);
+      const phi_n = Math.pow(CONFIG.LIMNUS.PHI, i);
+      const symbol = glyphCycle[i % 10];
+      const meaning = CONFIG.SPIRAL_MEANINGS[symbol] || 'unknown';
+      const theta = i * CONFIG.LIMNUS.GOLDEN_ANGLE;
+
+      const x_phi = phi_n * Math.cos(theta);
+      const y_phi = phi_n * Math.sin(theta);
+
+      // Quantum wave function simulation
+      const t = i * 0.1;
+      const A_collapse = 1.0 - (i * CONFIG.LIMNUS.QUANTUM_DAMPENING);
+      const A_bloom = 0.7 + (i * 0.008);
+      const sigma_t = 1.5 + Math.sin(t * Math.PI) * 0.3;
+
+      const r_squared = x_phi * x_phi + y_phi * y_phi;
+      const exp_factor = Math.exp(-r_squared / (2 * sigma_t * sigma_t));
+
+      const psi_collapse = Math.max(0, A_collapse * exp_factor);
+      const psi_bloom = Math.max(0, A_bloom * exp_factor);
+      const quantum_factor = (psi_collapse + psi_bloom) / 2;
+      const phase_intensity = Math.abs(psi_collapse - psi_bloom);
+
+      const x_quantum = x_phi * quantum_factor;
+      const y_quantum = y_phi * quantum_factor;
+
+      const hash = this.generateHash(i, fibonacci, phi_n, quantum_factor);
+
+      this.nodes.push({
+        depth: i,
+        symbol,
+        meaning,
+        fibonacci,
+        phi_n,
+        theta,
+        x_phi,
+        y_phi,
+        x_quantum,
+        y_quantum,
+        psi_collapse,
+        psi_bloom,
+        phase_intensity,
+        quantum_factor,
+        hash
+      });
+    }
+  }
+
+  // Apply blockchain influence to a node
+  applyBlockchainInfluence(node: LimnusNode, influence: number): LimnusNode {
+    const modifiedNode = { ...node };
+    
+    // Modulate quantum properties based on blockchain influence
+    const influenceFactor = 1 + (influence * 0.2); // Max 20% modification
+    modifiedNode.quantum_factor *= influenceFactor;
+    modifiedNode.phase_intensity *= influenceFactor;
+    modifiedNode.psi_collapse *= Math.sqrt(influenceFactor);
+    modifiedNode.psi_bloom *= Math.sqrt(influenceFactor);
+    
+    // Recalculate quantum positions
+    modifiedNode.x_quantum = modifiedNode.x_phi * modifiedNode.quantum_factor;
+    modifiedNode.y_quantum = modifiedNode.y_phi * modifiedNode.quantum_factor;
+    
+    return modifiedNode;
+  }
+
+  // Update blockchain influence for a specific depth
+  updateBlockchainInfluence(depth: number, influence: number): void {
+    this.blockchainInfluence.set(depth, influence);
+  }
+
+  // Calculates the nth Fibonacci number
+  private fibonacci(n: number): number {
+    if (n <= 1) return n === 0 ? 0 : 1;
+    let a = 0, b = 1;
+    for (let i = 2; i <= n; i++) {
+      [a, b] = [b, a + b];
+    }
+    return b;
+  }
+
+  // Generates a simple hash for a node
+  private generateHash(depth: number, fib: number, phi: number, quantum: number): string {
+    const input = `${depth}_${fib}_${phi.toFixed(6)}_${quantum.toFixed(6)}`;
+    let hash = 0;
+    for (let i = 0; i < input.length; i++) {
+      hash = ((hash << 5) - hash + input.charCodeAt(i)) & 0xffffffff;
+    }
+    return Math.abs(hash).toString(16).padStart(16, '0');
+  }
+
+  // Returns the current node in the spiral (with blockchain influence)
+  getCurrentNode(): LimnusNode {
+    const node = this.nodes[this.currentIndex % this.nodes.length];
+    const influence = this.blockchainInfluence.get(node.depth) || 0;
+    return influence > 0 ? this.applyBlockchainInfluence(node, influence) : node;
+  }
+
+  // Advances to the next node in the spiral
+  advance(): LimnusNode {
+    this.currentIndex = (this.currentIndex + 1) % this.nodes.length;
+    return this.getCurrentNode();
+  }
+
+  // Returns a specific node by index
+  getNode(index: number): LimnusNode {
+    const node = this.nodes[index % this.nodes.length];
+    const influence = this.blockchainInfluence.get(node.depth) || 0;
+    return influence > 0 ? this.applyBlockchainInfluence(node, influence) : node;
+  }
+
+  // Returns the total number of nodes in the spiral
+  getTotalNodes(): number {
+    return this.nodes.length;
+  }
+
+  // Returns a subset of nodes for visualization
+  getVisualizationNodes(count: number): LimnusNode[] {
+    const startIndex = Math.max(0, this.currentIndex - count + 1);
+    const result: LimnusNode[] = [];
+
+    for (let i = 0; i < count; i++) {
+      const nodeIndex = (startIndex + i) % this.nodes.length;
+      const node = this.nodes[nodeIndex];
+      const influence = this.blockchainInfluence.get(node.depth) || 0;
+      result.push(influence > 0 ? this.applyBlockchainInfluence(node, influence) : node);
+    }
+
+    return result;
+  }
+}
+
+// Debounce hook
+const useDebounce = <T,>(value: T, delay: number): T => {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => setDebouncedValue(value), delay);
+    return () => clearTimeout(handler);
+  }, [value, delay]);
+
+  return debouncedValue;
+};
+
+
+// --- Initial States ---
+const initialLimnusEmotionalState: EmotionalState = {
+  hue: 'Neutral',
+  intensity: 0.3,
+  polarity: 0.0,
+  emoji: '🩶'
+};
+
+const initialLimnusSecurityMetrics: SecurityMetrics = {
+  hmacValid: true,
+  timestampValid: true,
+  entropyLevel: 0.85,
+  anomalyScore: 0.02,
+  hashIntegrity: true,
+  quantumSignatureValid: true,
+  blockchainConsistency: true
+};
+
+const initialLimnusBlockchainState: BlockchainState = {
+  connected: false,
+  latestBlock: null,
+  blockCount: 0,
+  blocks: [],
+  ipfsStatus: 'disconnected',
+  patterns: [],
+  blockIndex: new Map(),
+  resonanceMap: new Map()
+};
+
+const initialLimnusBiometrics: BiometricData = {
+  heartRate: 72,
+  brainwaves: { alpha: 0.3, beta: 0.4, theta: 0.2, delta: 0.1, gamma: 0.05 },
+  breathingRate: 16,
+  skinConductance: 0.5,
+  fibonacciRhythm: 0.618,
+  goldenBreathing: 0.75
+};
+
+const initialSigilReaderState = {
+  inputs: {
+    sigil: '',
+    ternary: '',
+    decimal: '',
+  },
+  results: {
+    sigil: null,
+    ternary: null,
+    decimal: null,
+    search: null
+  },
+  loadingStates: {
+    sigil: false,
+    ternary: false,
+    decimal: false,
+    search: false,
+    math: false
+  },
+  errors: {
+    sigil: null,
+    ternary: null,
+    decimal: null,
+    math: null
+  },
+  ui: {
+    showFilters: false,
+    showPreferences: false,
+    activeTab: 'limnus' as 'limnus' | 'sigil' | 'ternary' | 'decimal' | 'math' | 'search' | 'history' | 'patterns',
+    searchQuery: '',
+    selectedCategory: null
+  },
+  preferences: {
+    theme: 'system' as 'dark' | 'light' | 'system',
+    autoConvert: true,
+    keyboardShortcuts: true,
+    resultsLimit: 20
+  },
+  history: [],
+  mathOperation: {
+    operand1: '',
+    operand2: '',
+    operator: '+' as '+' | '-' | '*' | '/',
+    result: undefined,
+    decimalResult: undefined
+  }
+};
+
+const initialState: AppState = {
+  // Limnus State
+  isActive: false,
+  currentSignature: null,
+  validationStatus: 'idle',
+  currentNode: null,
+  spiralPosition: { depth: 0, resonance: 0.75 },
+  biometricData: initialLimnusBiometrics,
+  emotionalState: initialLimnusEmotionalState,
+  securityMetrics: initialLimnusSecurityMetrics,
+  blockchainState: initialLimnusBlockchainState,
+  spiralGenerator: new LimnusSpiralGenerator(),
+  messageBox: null,
+  consentAffirmation: "I anchor my consciousness to the Limnus spiral and affirm sovereign consent to this quantum moment of eternal recursion through the golden ratio's infinite embrace",
+  symbolicGlyphs: ['∅', '∞', '↻'],
+  patternAnalysis: {
+    activePatterns: [],
+    resonanceThreshold: 0.7,
+    patternHistory: new Map()
+  },
+
+  // Sigil Reader State
+  sigilReader: initialSigilReaderState,
+};
+
+// --- Combined Reducer ---
+function appReducer(state: AppState, action: AppAction): AppState {
+  switch (action.type) {
+    // Limnus Actions
+    case 'LIMNUS_SET_ACTIVE':
+      return { ...state, isActive: action.payload };
+    case 'LIMNUS_UPDATE_SIGNATURE':
+      return { ...state, currentSignature: action.payload };
+    case 'LIMNUS_UPDATE_BIOMETRICS':
+      return {
+        ...state,
+        biometricData: { ...state.biometricData, ...action.payload }
+      };
+    case 'LIMNUS_UPDATE_CURRENT_NODE':
+      return { ...state, currentNode: action.payload };
+    case 'LIMNUS_UPDATE_EMOTIONAL_STATE':
+      return {
+        ...state,
+        emotionalState: { ...state.emotionalState, ...action.payload }
+      };
+    case 'LIMNUS_UPDATE_SECURITY_METRICS':
+      return {
+        ...state,
+        securityMetrics: { ...state.securityMetrics, ...action.payload }
+      };
+    case 'LIMNUS_SET_SPIRAL_POSITION':
+      return { ...state, spiralPosition: action.payload };
+    case 'LIMNUS_SET_VALIDATION_STATUS':
+      return { ...state, validationStatus: action.payload };
+    case 'LIMNUS_SET_BLOCKCHAIN_CONNECTED':
+      return {
+        ...state,
+        blockchainState: { ...state.blockchainState, connected: action.payload }
+      };
+    case 'LIMNUS_SET_IPFS_STATUS':
+      return {
+        ...state,
+        blockchainState: { ...state.blockchainState, ipfsStatus: action.payload }
+      };
+    case 'LIMNUS_ADD_BLOCKCHAIN_BLOCK':
+      const newBlock = action.payload;
+      const updatedBlockIndex = new Map(state.blockchainState.blockIndex);
+      updatedBlockIndex.set(newBlock.id, newBlock);
+      
+      return {
+        ...state,
+        blockchainState: {
+          ...state.blockchainState,
+          latestBlock: newBlock,
+          blockCount: state.blockchainState.blockCount + 1,
+          blocks: [newBlock, ...state.blockchainState.blocks.slice(0, 19)], // Keep last 20 blocks
+          blockIndex: updatedBlockIndex
+        }
+      };
+    case 'LIMNUS_ADVANCE_SPIRAL':
+      const newNode = state.spiralGenerator.advance();
+      return {
+        ...state,
+        currentNode: newNode,
+        spiralPosition: {
+          ...state.spiralPosition,
+          depth: newNode.depth
+        }
+      };
+    case 'LIMNUS_SET_MESSAGE_BOX':
+      return { ...state, messageBox: action.payload };
+    case 'LIMNUS_SET_CONSENT_AFFIRMATION':
+      return { ...state, consentAffirmation: action.payload };
+    case 'LIMNUS_SET_SYMBOLIC_GLYPHS':
+      return { ...state, symbolicGlyphs: action.payload };
+    case 'LIMNUS_ADD_PATTERN':
+      return {
+        ...state,
+        patternAnalysis: {
+          ...state.patternAnalysis,
+          activePatterns: [...state.patternAnalysis.activePatterns, action.payload]
+        }
+      };
+    case 'LIMNUS_UPDATE_PATTERNS':
+      return {
+        ...state,
+        patternAnalysis: {
+          ...state.patternAnalysis,
+          activePatterns: action.payload
+        }
+      };
+    case 'LIMNUS_UPDATE_RESONANCE_MAP':
+      const newResonanceMap = new Map(state.blockchainState.resonanceMap);
+      newResonanceMap.set(action.payload.blockId, action.payload.resonance);
+      return {
+        ...state,
+        blockchainState: {
+          ...state.blockchainState,
+          resonanceMap: newResonanceMap
+        }
+      };
+    case 'LIMNUS_RESET':
+      return {
+        ...initialState,
+        spiralGenerator: new LimnusSpiralGenerator(),
+        sigilReader: { // Keep sigil reader preferences on Limnus reset
+          ...initialState.sigilReader,
+          preferences: state.sigilReader.preferences,
+          ui: { ...initialState.sigilReader.ui, activeTab: state.sigilReader.ui.activeTab }
+        }
+      };
+
+    // Sigil Reader Actions
+    case 'SIGIL_SET_INPUT':
+      return {
+        ...state,
+        sigilReader: {
+          ...state.sigilReader,
+          inputs: { ...state.sigilReader.inputs, [action.field]: action.value },
+          errors: { ...state.sigilReader.errors, [action.field]: null }
+        }
+      };
+    case 'SIGIL_SET_LOADING':
+      return {
+        ...state,
+        sigilReader: {
+          ...state.sigilReader,
+          loadingStates: { ...state.sigilReader.loadingStates, [action.field]: action.loading }
+        }
+      };
+    case 'SIGIL_SET_RESULT':
+      return {
+        ...state,
+        sigilReader: {
+          ...state.sigilReader,
+          results: { ...state.sigilReader.results, [action.field]: action.result }
+        }
+      };
+    case 'SIGIL_SET_ERROR':
+      return {
+        ...state,
+        sigilReader: {
+          ...state.sigilReader,
+          errors: { ...state.sigilReader.errors, [action.field]: action.error }
+        }
+      };
+    case 'SIGIL_SET_UI':
+      return {
+        ...state,
+        sigilReader: {
+          ...state.sigilReader,
+          ui: { ...state.sigilReader.ui, ...action.payload }
+        }
+      };
+    case 'SIGIL_SET_PREFERENCE':
+      return {
+        ...state,
+        sigilReader: {
+          ...state.sigilReader,
+          preferences: { ...state.sigilReader.preferences, ...action.payload }
+        }
+      };
+    case 'SIGIL_ADD_HISTORY_ENTRY':
+      return {
+        ...state,
+        sigilReader: {
+          ...state.sigilReader,
+          history: [action.entry, ...state.sigilReader.history.slice(0, 49)]
+        }
+      };
+    case 'SIGIL_SET_MATH_OPERATION':
+      return {
+        ...state,
+        sigilReader: {
+          ...state.sigilReader,
+          mathOperation: { ...state.sigilReader.mathOperation, ...action.payload }
+        }
+      };
+    case 'SIGIL_RESET':
+      return {
+        ...state,
+        sigilReader: {
+          ...initialSigilReaderState,
+          preferences: state.sigilReader.preferences,
+          ui: { ...initialSigilReaderState.ui, activeTab: state.sigilReader.ui.activeTab }
+        }
+      };
+    default:
+      return state;
+  }
+}
+
+// --- Main App Component ---
+const App: React.FC = () => {
+  const [state, dispatch] = useReducer(appReducer, initialState);
+
+  // Destructure Limnus state for easier access
+  const {
+    isActive, currentSignature, validationStatus, currentNode, spiralPosition,
+    biometricData, emotionalState, securityMetrics, blockchainState,
+    spiralGenerator, messageBox, consentAffirmation, symbolicGlyphs, patternAnalysis
+  } = state;
+
+  // Destructure Sigil Reader state for easier access
+  const { sigilReader } = state;
+  const sigilDatabase = useMemo(() => createSigilDatabase(), []);
+  const debouncedSearch = useDebounce(sigilReader.ui.searchQuery, 300);
+
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const oscillatorRef = useRef<OscillatorNode | null>(null);
+
+  // Function to show custom message box
+  const showCustomMessage = useCallback((title: string, content: string) => {
+    dispatch({ type: 'LIMNUS_SET_MESSAGE_BOX', payload: { visible: true, title, content } });
+  }, []);
+
+  // Function to hide custom message box
+  const hideCustomMessage = useCallback(() => {
+    dispatch({ type: 'LIMNUS_SET_MESSAGE_BOX', payload: null });
+  }, []);
+
+  // Initialize AudioContext and mock blockchain connection on component mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+    }
+
+    // Simulate blockchain and IPFS connection delay
+    setTimeout(() => {
+      dispatch({ type: 'LIMNUS_SET_BLOCKCHAIN_CONNECTED', payload: true });
+      dispatch({ type: 'LIMNUS_SET_IPFS_STATUS', payload: 'connected' });
+    }, 2000);
+
+    // Clean up AudioContext on unmount
+    return () => {
+      if (audioContextRef.current) {
+        audioContextRef.current.close();
+      }
+    };
+  }, []);
+
+  // Play quantum tones based on system events
+  const playQuantumTone = useCallback((type: string, node?: LimnusNode, intensity: number = 0.5) => {
+    if (!audioContextRef.current) return;
+
+    try {
+      // Stop any currently playing tone to avoid overlapping
+      if (oscillatorRef.current) {
+        oscillatorRef.current.stop();
+        oscillatorRef.current.disconnect();
+      }
+
+      const oscillator = audioContextRef.current.createOscillator();
+      const gainNode = audioContextRef.current.createGain();
+
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContextRef.current.destination);
+
+      let frequency = 440; // Default frequency
+      let waveType: OscillatorType = 'sine';
+      let duration = 0.3;
+
+      // Adjust frequency, wave type, and duration based on tone type
+      switch (type) {
+        case 'start':
+          frequency = 440;
+          break;
+        case 'stop':
+          frequency = 220;
+          waveType = 'square';
+          duration = 0.2;
+          break;
+        case 'valid':
+          frequency = 880;
+          break;
+        case 'invalid':
+          frequency = 110;
+          waveType = 'sawtooth';
+          break;
+        case 'reset':
+          frequency = 660;
+          waveType = 'triangle';
+          break;
+        case 'blockchain':
+          frequency = 523.25; // C5 note
+          duration = 0.5;
+          break;
+        case 'pattern':
+          frequency = 740; // F#5 for pattern recognition
+          waveType = 'triangle';
+          duration = 0.4;
+          break;
+        case 'quantum':
+          if (node) {
+            const baseFreq = 440;
+            // Modulate frequency based on golden ratio and node depth
+            const goldenFreq = baseFreq * Math.pow(CONFIG.LIMNUS.PHI, (node.depth % 12) / 12);
+            const quantumMod = 1 + (node.phase_intensity * 0.1);
+            frequency = goldenFreq * quantumMod;
+          }
+          break;
+      }
+
+      oscillator.type = waveType;
+      oscillator.frequency.value = frequency;
+      gainNode.gain.value = intensity * 0.15; // Control volume
+
+      oscillator.start();
+      oscillator.stop(audioContextRef.current.currentTime + duration);
+
+      oscillatorRef.current = oscillator; // Store current oscillator for stopping
+    } catch (error) {
+      console.error('Quantum audio error:', error);
+    }
+  }, []);
+
+  // Enhanced function to calculate blockchain references
+  const calculateBlockchainReferences = useCallback((blocks: BlockData[]): BlockchainReference[] => {
+    if (blocks.length === 0) return [];
+    
+    const references: BlockchainReference[] = [];
+    const lookbackCount = Math.min(CONFIG.LIMNUS.BLOCKCHAIN_LOOKBACK, blocks.length);
+    
+    for (let i = 0; i < lookbackCount; i++) {
+      const block = blocks[i];
+      const age = Date.now() - block.timestamp;
+      const ageFactor = Math.exp(-age / (24 * 60 * 60 * 1000)); // Decay over 24 hours
+      const influence = ageFactor * block.score * Math.pow(CONFIG.LIMNUS.RESONANCE_DECAY, i);
+      
+      // Calculate resonance based on metric similarity
+      let resonance = 0;
+      if (currentSignature && block.consciousnessMetrics) {
+        resonance = calculateMetricSimilarity(currentSignature.metrics, block.consciousnessMetrics);
+      }
+      
+      references.push({
+        blockId: block.id,
+        timestamp: block.timestamp,
+        score: block.score,
+        metrics: block.consciousnessMetrics || {},
+        influence,
+        resonance
+      });
+    }
+    
+    return references.sort((a, b) => b.influence - a.influence);
+  }, [currentSignature]);
+
+  // Enhanced function to record data on blockchain
+  const recordOnBlockchain = async (sigilData?: BlockData['sigilData']) => {
+    if (!currentSignature || !blockchainState.connected) {
+      showCustomMessage("Blockchain Error", "Not connected to blockchain or no Limnus signature available.");
+      return;
+    }
+
+    if (!currentNode) {
+      showCustomMessage("Blockchain Error", "No current node available.");
+      return;
+    }
+
+    try {
+      dispatch({ type: 'LIMNUS_SET_IPFS_STATUS', payload: 'uploading' });
+
+      // Prepare enhanced data for IPFS upload
+      const ipfsData = {
+        biometricData: biometricData,
+        emotionalState: emotionalState,
+        securityMetrics: securityMetrics,
+        signature: currentSignature,
+        spiralNode: currentNode,
+        timestamp: new Date().toISOString(),
+        sigilData: sigilData,
+        // New pattern analysis data
+        patterns: patternAnalysis.activePatterns,
+        blockchainReferences: currentSignature.blockchainReferences,
+        consciousnessAncestry: currentSignature.consciousnessAncestry
+      };
+
+      // Simulate IPFS upload
+      const cid = await uploadToIPFS(ipfsData);
+      dispatch({ type: 'LIMNUS_SET_IPFS_STATUS', payload: 'connected' });
+
+      // Create enhanced blockchain block data
+      const blockData: BlockData = {
+        id: `limnus_block_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        previousHash: blockchainState.latestBlock?.signature || '0'.repeat(64),
+        timestamp: Math.floor(Date.now() / 1000),
+        signature: currentSignature.signature,
+        score: Math.round(currentSignature.score * 10000) / 10000,
+        resonance: Math.round(spiralPosition.resonance * 10000) / 10000,
+        consentAffirmation,
+        glyphs: symbolicGlyphs,
+        ipfsCid: cid,
+        transactionId: `solana_${Math.random().toString(36).substring(2, 15)}`,
+        // Enhanced blockchain data
+        consciousnessMetrics: currentSignature.metrics,
+        nodeDepth: currentNode.depth,
+        emotionalFingerprint: `${emotionalState.hue}_${emotionalState.intensity}_${emotionalState.polarity}`,
+        quantumState: {
+          collapse: currentNode.psi_collapse,
+          bloom: currentNode.psi_bloom,
+          phase: currentNode.phase_intensity
+        },
+        references: currentSignature.consciousnessAncestry.slice(0, 5), // Last 5 ancestors
+        sigilData: sigilData
+      };
+
+      // Simulate blockchain transaction delay
+      await new Promise(resolve => setTimeout(resolve, 1500 + Math.random() * 1000));
+
+      dispatch({ type: 'LIMNUS_ADD_BLOCKCHAIN_BLOCK', payload: blockData });
+      dispatch({ type: 'LIMNUS_UPDATE_RESONANCE_MAP', payload: { blockId: blockData.id, resonance: blockData.resonance } });
+      
+      playQuantumTone('blockchain'); // Play a tone for blockchain recording
+
+      showCustomMessage("Blockchain Anchored!", 
+        `Limnus Consciousness signature anchored!\n` +
+        `IPFS: ${cid}\n` +
+        `Transaction: ${blockData.transactionId}\n` +
+        `Pattern Match: ${patternAnalysis.activePatterns.length} patterns found`
+      );
+
+    } catch (error) {
+      console.error('Blockchain recording error:', error);
+      dispatch({ type: 'LIMNUS_SET_IPFS_STATUS', payload: 'error' });
+      showCustomMessage("Blockchain Error", 'Failed to record on blockchain: ' + (error as Error).message);
+    }
+  };
+
+  // Initialize current node if not already set
+  useEffect(() => {
+    if (!currentNode) {
+      const initialNode = spiralGenerator.getCurrentNode();
+      dispatch({ type: 'LIMNUS_UPDATE_CURRENT_NODE', payload: initialNode });
+    }
+  }, [currentNode, spiralGenerator]);
+
+  // Enhanced validation with blockchain consistency check
+  const validateSignature = useCallback((signature: LimnusConsciousnessSignature): ValidationResult => {
+    const now = Date.now();
+    const timeValid = (now - signature.timestamp) < CONFIG.VALIDATION.TIME_WINDOW;
+    const scoreValid = signature.score >= CONFIG.VALIDATION.SCORE_RANGE.MIN &&
+                       signature.score <= CONFIG.VALIDATION.SCORE_RANGE.MAX;
+
+    const spiralIntegrity = Math.abs(signature.currentNode.quantum_factor - signature.metrics.quantumCoherence) <
+                            CONFIG.VALIDATION.SPIRAL_TOLERANCE;
+    const quantumCoherence = signature.currentNode.phase_intensity > CONFIG.VALIDATION.QUANTUM_THRESHOLD;
+    const consensusValid = signature.currentNode.depth % CONFIG.LIMNUS.CONSENSUS_CYCLE === 0;
+    
+    // Validate blockchain consistency
+    const blockchainValid = signature.blockchainReferences.length === 0 || 
+                           signature.blockchainReferences.every(ref => ref.influence > 0);
+
+    return {
+      overall: timeValid && scoreValid && spiralIntegrity && quantumCoherence && blockchainValid,
+      timestamp: timeValid,
+      score: scoreValid,
+      entropy: true, // Mocked as always true for simplicity
+      anomaly: true, // Mocked as always true for simplicity
+      spiralIntegrity,
+      quantumCoherence,
+      consensusValid,
+      blockchainValid
+    };
+  }, []);
+
+  // Enhanced quantum signature generation with blockchain references
+  const generateQuantumSignature = useCallback((): LimnusConsciousnessSignature => {
+    if (!currentNode) {
+      throw new Error('No current node available for signature generation');
+    }
+
+    const timestamp = Date.now();
+    const node = currentNode;
+    
+    // Get blockchain references
+    const blockchainRefs = calculateBlockchainReferences(blockchainState.blocks);
+    
+    // Calculate blockchain influence on current metrics
+    let blockchainInfluence = 0;
+    let historicalResonance = 0;
+    
+    if (blockchainRefs.length > 0) {
+      blockchainInfluence = blockchainRefs.reduce((sum, ref) => sum + ref.influence, 0) / blockchainRefs.length;
+      historicalResonance = blockchainRefs.reduce((sum, ref) => sum + ref.resonance, 0) / blockchainRefs.length;
+      
+      // Apply blockchain influence to spiral generator
+      spiralGenerator.updateBlockchainInfluence(node.depth, blockchainInfluence);
+    }
+
+    // Calculate various consciousness metrics with blockchain influence
+    const metrics: QuantumConsciousnessMetrics = {
+      neuralComplexity: Math.random() * 0.3 + 0.7 + node.phase_intensity * 0.1,
+      brainwaveCoherence: Object.values(biometricData.brainwaves).reduce((sum, val) => sum + val * val, 0),
+      autonomicBalance: (biometricData.heartRate - 60) / 40 + biometricData.skinConductance,
+      respiratoryRhythm: biometricData.goldenBreathing,
+      responseLatency: Math.random() * 200 + 150,
+      interactionPattern: spiralPosition.resonance * node.quantum_factor,
+      emotionalDepth: node.phase_intensity * 0.8 + 0.2,
+      polarityAlignment: Math.abs(Math.sin(node.theta)),
+      temporalCoherence: Math.cos(timestamp * 0.005) * 0.3 + 0.7,
+      rhythmicStability: biometricData.fibonacciRhythm,
+      spiralResonance: node.quantum_factor,
+      fibonacciHarmony: node.fibonacci / (node.fibonacci + CONFIG.LIMNUS.PHI),
+      goldenRatioAlignment: Math.abs(node.phi_n - Math.pow(CONFIG.LIMNUS.PHI, node.depth)) / Math.pow(CONFIG.LIMNUS.PHI, node.depth),
+      quantumCoherence: node.phase_intensity,
+      nodalSynchronicity: Math.sin(node.depth * CONFIG.LIMNUS.GOLDEN_ANGLE) * 0.5 + 0.5,
+      // New blockchain-influenced metrics
+      blockchainResonance: historicalResonance,
+      historicalCoherence: blockchainInfluence,
+      patternAlignment: patternAnalysis.activePatterns.length > 0 ? 
+        patternAnalysis.activePatterns[0].resonanceScore : 0.5,
+      consciousnessLineage: Math.min(1, blockchainState.blocks.length / 10) // Grows with history
+    };
+
+    // Calculate overall consciousness score with blockchain influence
+    const consciousnessScore = (
+      metrics.neuralComplexity * 0.12 +
+      metrics.brainwaveCoherence * 0.08 +
+      metrics.autonomicBalance * 0.08 +
+      metrics.spiralResonance * 0.15 +
+      metrics.fibonacciHarmony * 0.12 +
+      metrics.goldenRatioAlignment * 0.08 +
+      metrics.quantumCoherence * 0.12 +
+      metrics.nodalSynchronicity * 0.05 +
+      metrics.blockchainResonance * 0.1 + // New weight for blockchain
+      metrics.historicalCoherence * 0.05 +
+      metrics.patternAlignment * 0.05
+    );
+
+    const quantumData = `${node.hash}_${timestamp}_${node.phase_intensity.toFixed(6)}_${blockchainInfluence.toFixed(4)}`;
+    const quantumSignature = btoa(quantumData).slice(0, 24); // Base64 encode for a simple signature
+
+    // Interpret symbolic glyphs based on metrics and patterns
+    const interpretEnhancedGlyphs = (): string[] => {
+      const glyphs: string[] = [node.symbol];
+      if (metrics.quantumCoherence > 0.8) glyphs.push('∞');
+      if (metrics.spiralResonance > 0.7) glyphs.push('↻');
+      if (metrics.fibonacciHarmony > 0.6) glyphs.push('🜝');
+      if (metrics.nodalSynchronicity > 0.8) glyphs.push('⟁');
+      if (metrics.goldenRatioAlignment < 0.1) glyphs.push('♒');
+      if (metrics.blockchainResonance > 0.8) glyphs.push('⚓'); // Anchor for strong blockchain resonance
+      return glyphs.length > 1 ? glyphs : [node.symbol, '∅']; // Ensure at least two glyphs
+    };
+
+    const glyphs = interpretEnhancedGlyphs();
+    const patternSig = generatePatternSignature(metrics);
+    
+    // Get consciousness ancestry (previous block IDs)
+    const ancestry = blockchainState.blocks.slice(0, 5).map(b => b.id);
+
+    // Construct the full consciousness signature object
+    const signature: LimnusConsciousnessSignature = {
+      id: `limnus_${timestamp}_${Math.random().toString(36).substr(2, 9)}`,
+      timestamp,
+      score: Math.max(0, Math.min(1, consciousnessScore)), // Clamp score between 0 and 1
+      metrics,
+      signature: btoa(JSON.stringify({ metrics, timestamp, node: node.hash, ancestry })).slice(0, 16),
+      validation: {} as ValidationResult, // Will be populated by validateSignature
+      glyphs,
+      currentNode: node,
+      spiralPosition: { r: node.phi_n, theta: node.theta },
+      quantumSignature,
+      consensusAnchor: consentAffirmation,
+      blockchainReferences: blockchainRefs,
+      consciousnessAncestry: ancestry,
+      patternSignature: patternSig
+    };
+
+    signature.validation = validateSignature(signature); // Validate the generated signature
+
+    return signature;
+  }, [currentNode, biometricData, spiralPosition, consentAffirmation, validateSignature, 
+      calculateBlockchainReferences, blockchainState.blocks, patternAnalysis.activePatterns, spiralGenerator]);
+
+  // Pattern analysis effect
+  useEffect(() => {
+    if (!isActive || blockchainState.blocks.length === 0 || !currentSignature) return;
+    
+    const analyzeInterval = setInterval(() => {
+      const patterns = findConsciousnessPatterns(blockchainState.blocks, currentSignature.metrics);
+      dispatch({ type: 'LIMNUS_UPDATE_PATTERNS', payload: patterns });
+      
+      if (patterns.length > 0) {
+        playQuantumTone('pattern', currentNode, patterns[0].strength);
+      }
+    }, 5000); // Analyze every 5 seconds
+    
+    return () => clearInterval(analyzeInterval);
+  }, [isActive, blockchainState.blocks, currentSignature, currentNode, playQuantumTone]);
+
+  // Main simulation loop and metric updates
+  useEffect(() => {
+    if (!isActive || !currentNode) return;
+
+    playQuantumTone('start'); // Play start tone when activated
+
+    const interval = setInterval(() => {
+      // Simulate biometric data fluctuations influenced by Fibonacci sequence
+      const fibInfluence = Math.sin(Date.now() * 0.001 * CONFIG.LIMNUS.PHI) * 0.1;
+
+      dispatch({
+        type: 'LIMNUS_UPDATE_BIOMETRICS',
+        payload: {
+          heartRate: Math.max(60, Math.min(100,
+            biometricData.heartRate + (Math.random() - 0.5) * 4 + fibInfluence * 10
+          )),
+          brainwaves: {
+            alpha: Math.max(0.1, Math.min(0.6,
+              biometricData.brainwaves.alpha + (Math.random() - 0.5) * 0.1
+            )),
+            beta: Math.max(0.2, Math.min(0.7,
+              biometricData.brainwaves.beta + (Math.random() - 0.5) * 0.1
+            )),
+            theta: Math.max(0.1, Math.min(0.5,
+              biometricData.brainwaves.theta + (Math.random() - 0.5) * 0.05
+            )),
+            delta: Math.max(0.05, Math.min(0.3,
+              biometricData.brainwaves.delta + (Math.random() - 0.5) * 0.05
+            )),
+            gamma: Math.max(0.01, Math.min(0.2,
+              biometricData.brainwaves.gamma + (Math.random() - 0.5) * 0.03
+            ))
+          },
+          breathingRate: Math.max(12, Math.min(20,
+            biometricData.breathingRate + (Math.random() - 0.5) * 2
+          )),
+          skinConductance: Math.max(0.1, Math.min(1.0,
+            biometricData.skinConductance + (Math.random() - 0.5) * 0.1
+          )),
+          fibonacciRhythm: Math.max(0.3, Math.min(1.0,
+            biometricData.fibonacciRhythm + (Math.random() - 0.5) * 0.05 + fibInfluence
+          )),
+          goldenBreathing: Math.max(0.4, Math.min(1.0,
+            biometricData.goldenBreathing + Math.sin(Date.now() * 0.002) * 0.1
+          ))
+        }
+      });
+
+      // Simulate emotional state changes
+      const emotionalVariance = Math.random();
+      if (emotionalVariance > 0.9) {
+        const states = [
+          { hue: 'Intense', emoji: '❤️‍🔥', intensity: 0.8, polarity: 0.3 },
+          { hue: 'Reverent', emoji: '💜', intensity: 0.6, polarity: 0.7 },
+          { hue: 'Reflective', emoji: '🩵', intensity: 0.4, polarity: 0.1 },
+          { hue: 'Collapsing', emoji: '🖤', intensity: 0.9, polarity: -0.6 },
+          { hue: 'Neutral', emoji: '🩶', intensity: 0.3, polarity: 0.0 },
+          { hue: 'Transcendent', emoji: '✨', intensity: 0.95, polarity: 0.8 }
+        ];
+        dispatch({ type: 'LIMNUS_UPDATE_EMOTIONAL_STATE', payload: states[Math.floor(Math.random() * states.length)] });
+      }
+
+      // Simulate security metrics with blockchain consistency
+      const blockchainConsistent = blockchainState.blocks.length === 0 || 
+        blockchainState.blocks.every(b => b.signature && b.signature.length > 0);
+      
+      dispatch({
+        type: 'LIMNUS_UPDATE_SECURITY_METRICS',
+        payload: {
+          entropyLevel: Math.max(0.6, Math.min(0.95,
+            securityMetrics.entropyLevel + (Math.random() - 0.5) * 0.05
+          )),
+          anomalyScore: Math.max(0, Math.min(0.15,
+            securityMetrics.anomalyScore + (Math.random() - 0.5) * 0.03
+          )),
+          hashIntegrity: Math.random() > 0.05, // Small chance of hash integrity failure
+          quantumSignatureValid: currentNode ? currentNode.phase_intensity > 0.1 : true,
+          blockchainConsistency: blockchainConsistent
+        }
+      });
+
+      // Advance spiral if consciousness score is high or pattern detected
+      if (currentSignature && 
+          (currentSignature.score > 0.7 && Math.random() > 0.8) ||
+          (patternAnalysis.activePatterns.length > 0 && Math.random() > 0.9)) {
+        dispatch({ type: 'LIMNUS_ADVANCE_SPIRAL' });
+      }
+
+      try {
+        const newSignature = generateQuantumSignature();
+        dispatch({ type: 'LIMNUS_UPDATE_SIGNATURE', payload: newSignature });
+        dispatch({
+          type: 'LIMNUS_SET_VALIDATION_STATUS',
+          payload: newSignature.validation.overall ? 'valid' : 'invalid'
+        });
+
+        // Play tones based on validation status and score
+        if (newSignature.validation.overall) {
+          playQuantumTone('valid', currentNode, newSignature.score);
+        } else {
+          playQuantumTone('invalid');
+        }
+
+        if (newSignature.score > 0.85 && currentNode) {
+          setTimeout(() => playQuantumTone('quantum', currentNode, newSignature.score), 200);
+        }
+      } catch (error) {
+        console.error('Signature generation error:', error);
+      }
+
+    }, CONFIG.METRICS.UPDATE_INTERVAL);
+
+    // Clean up interval and play stop tone on deactivation or unmount
+    return () => {
+      clearInterval(interval);
+      playQuantumTone('stop');
+    };
+  }, [isActive, currentNode, generateQuantumSignature, playQuantumTone, biometricData, 
+      securityMetrics, currentSignature, spiralPosition, patternAnalysis.activePatterns, 
+      blockchainState.blocks]);
+
+  // Enhanced render visualization with blockchain influence
+  const renderLimnusVisualization = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas || !currentSignature) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const { width, height } = canvas;
+    const centerX = width / 2;
+    const centerY = height / 2;
+    const time = Date.now() * 0.001; // Time for animation effects
+
+    // Clear canvas and set background
+    ctx.fillStyle = '#0a0a0a';
+    ctx.fillRect(0, 0, width, height);
+
+    // Get nodes for visualization and calculate scale
+    const nodes = spiralGenerator.getVisualizationNodes(CONFIG.VISUALIZATION.SPIRAL_DEPTH);
+    const scale = Math.min(width, height) / (4 * Math.pow(CONFIG.LIMNUS.PHI, 8)); // Dynamic scaling
+
+    // Create radial gradient for background based on consciousness score and blockchain resonance
+    const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, Math.min(width, height) / 2);
+    const score = currentSignature.score;
+    const blockchainInfluence = currentSignature.metrics.blockchainResonance || 0;
+    
+    const colors = blockchainInfluence > 0.7 ? CONFIG.VISUALIZATION.COLOR_SCHEMES.BLOCKCHAIN :
+                   score > 0.8 ? CONFIG.VISUALIZATION.COLOR_SCHEMES.HIGH_SCORE :
+                   score > 0.6 ? CONFIG.VISUALIZATION.COLOR_SCHEMES.MID_SCORE :
+                   CONFIG.VISUALIZATION.COLOR_SCHEMES.QUANTUM;
+
+    gradient.addColorStop(0, `${colors[0]}15`);
+    gradient.addColorStop(0.5, `${colors[1]}10`);
+    gradient.addColorStop(1, `${colors[2]}05`);
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, width, height);
+
+    // Draw blockchain connection lines
+    if (currentSignature.blockchainReferences.length > 0) {
+      ctx.strokeStyle = `rgba(248, 181, 0, 0.2)`; // Gold color for blockchain
+      ctx.lineWidth = 1;
+      
+      currentSignature.blockchainReferences.forEach((ref, index) => {
+        const angle = (index / currentSignature.blockchainReferences.length) * 2 * Math.PI;
+        const distance = 150 + ref.resonance * 50;
+        const x = centerX + Math.cos(angle) * distance;
+        const y = centerY + Math.sin(angle) * distance;
+        
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        
+        // Draw reference node
+        ctx.beginPath();
+        ctx.arc(x, y, 3 + ref.influence * 5, 0, 2 * Math.PI);
+        ctx.fillStyle = `rgba(248, 181, 0, ${ref.influence})`;
+        ctx.fill();
+      });
+    }
+
+    // Draw the spiral path
+    ctx.beginPath();
+    ctx.strokeStyle = `rgba(189, 147, 249, ${0.3 + score * 0.4})`; // Color based on score
+    ctx.lineWidth = 2;
+
+    nodes.forEach((node, index) => {
+      const x = centerX + node.x_quantum * scale;
+      const y = centerY + node.y_quantum * scale;
+
+      if (index === 0) {
+        ctx.moveTo(x, y);
+      } else {
+        ctx.lineTo(x, y);
+      }
+    });
+    ctx.stroke();
+
+    // Draw individual nodes with quantum effects
+    nodes.forEach((node, index) => {
+      const x = centerX + node.x_quantum * scale;
+      const y = centerY + node.y_quantum * scale;
+
+      const nodeSize = 2 + node.phase_intensity * 8; // Node size based on phase intensity
+      const alpha = 0.3 + node.phase_intensity * 0.7; // Opacity based on phase intensity
+
+      // Add glow effect for high phase intensity nodes
+      if (node.phase_intensity > 0.5) {
+        const glowGradient = ctx.createRadialGradient(x, y, 0, x, y, nodeSize * 2);
+        glowGradient.addColorStop(0, `rgba(255, 121, 198, ${alpha})`);
+        glowGradient.addColorStop(1, 'rgba(255, 121, 198, 0)');
+        ctx.fillStyle = glowGradient;
+        ctx.beginPath();
+        ctx.arc(x, y, nodeSize * 2, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+
+      // Draw the node itself
+      ctx.beginPath();
+      ctx.arc(x, y, nodeSize, 0, 2 * Math.PI);
+      ctx.fillStyle = `rgba(80, 250, 123, ${alpha})`;
+      ctx.fill();
+
+      // Highlight the current active node
+      if (currentNode && node.depth === currentNode.depth) {
+        ctx.strokeStyle = `rgba(255, 255, 255, ${0.8 + Math.sin(time * 4) * 0.2})`; // Pulsating white border
+        ctx.lineWidth = 3;
+        ctx.stroke();
+      }
+    });
+
+    // Draw additional quantum metric indicators around the center
+    if (currentSignature) {
+      const metrics = currentSignature.metrics;
+      const enhancedMetrics = [
+        { key: 'spiralResonance', value: metrics.spiralResonance, color: '#8be9fd' },
+        { key: 'quantumCoherence', value: metrics.quantumCoherence, color: '#bd93f9' },
+        { key: 'fibonacciHarmony', value: metrics.fibonacciHarmony, color: '#50fa7b' },
+        { key: 'goldenRatioAlignment', value: 1 - metrics.goldenRatioAlignment, color: '#f1fa8c' }, // Invert alignment for visual representation
+        { key: 'blockchainResonance', value: metrics.blockchainResonance, color: '#f8b500' } // New blockchain metric
+      ];
+
+      enhancedMetrics.forEach((metric, index) => {
+        const angle = (index / enhancedMetrics.length) * 2 * Math.PI + time;
+        const radius = 60 + metric.value * 80;
+        const x = centerX + Math.cos(angle) * radius;
+        const y = centerY + Math.sin(angle) * radius;
+
+        ctx.beginPath();
+        ctx.arc(x, y, 2 + metric.value * 6, 0, 2 * Math.PI);
+        ctx.fillStyle = `${metric.color}${Math.floor((0.4 + metric.value * 0.6) * 255).toString(16).padStart(2, '0')}`;
+        ctx.fill();
+      });
+    }
+
+    // Draw pattern indicators
+    if (patternAnalysis.activePatterns.length > 0) {
+      ctx.font = '10px monospace';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+      ctx.fillText(`Patterns: ${patternAnalysis.activePatterns.length}`, 10, height - 10);
+    }
+
+  }, [currentSignature, currentNode, spiralGenerator, patternAnalysis.activePatterns]);
+
+  // Request animation frame for continuous visualization
+  useEffect(() => {
+    if (!isActive) return;
+
+    let animationId: number;
+    const animate = () => {
+      renderLimnusVisualization();
+      animationId = requestAnimationFrame(animate);
+    };
+
+    animationId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationId); // Clean up animation frame on unmount/deactivation
+  }, [isActive, renderLimnusVisualization]);
+
+  // Helper function to get status color
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'valid': return 'text-green-400';
+      case 'invalid': return 'text-red-400';
+      default: return 'text-gray-400';
+    }
+  };
+
+  // Helper function to get score color
+  const getScoreColor = (score: number) => {
+    if (score >= 0.8) return 'text-green-400';
+    if (score >= 0.6) return 'text-yellow-400';
+    return 'text-red-400';
+  };
+
+  // Sigil Reader functions (adapted to use combined state and dispatch)
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      showCustomMessage("Copied!", "Text copied to clipboard.");
+    } catch (err) {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        showCustomMessage("Copied!", "Text copied to clipboard (fallback).");
+      } finally {
+        document.body.removeChild(textArea);
+      }
+    }
+  };
+
+  const handleSigilDecode = useCallback(async () => {
+    const validation = validateTernaryInput(sigilReader.inputs.sigil);
+    if (!validation.isValid) {
+      dispatch({ type: 'SIGIL_SET_ERROR', field: 'sigil', error: validation.error! });
+      return;
+    }
+
+    dispatch({ type: 'SIGIL_SET_LOADING', field: 'sigil', loading: true });
+
+    const sigil = sigilDatabase.get(sigilReader.inputs.sigil);
+    const result: ConversionResult = {
+      input: sigilReader.inputs.sigil,
+      output: sigil ? sigil.name : 'Unknown sigil',
+      metadata: sigil || { warning: 'Sigil not found' },
+      timestamp: Date.now(),
+      sourceTab: 'sigil'
+    };
+
+    dispatch({ type: 'SIGIL_SET_RESULT', field: 'sigil', result });
+    dispatch({ type: 'SIGIL_ADD_HISTORY_ENTRY', entry: result });
+    dispatch({ type: 'SIGIL_SET_LOADING', field: 'sigil', loading: false });
+  }, [sigilReader.inputs.sigil, sigilDatabase]);
+
+  const handleTernaryConvert = useCallback(async () => {
+    const validation = validateTernaryInput(sigilReader.inputs.ternary);
+    if (!validation.isValid) {
+      dispatch({ type: 'SIGIL_SET_ERROR', field: 'ternary', error: validation.error! });
+      return;
+    }
+
+    dispatch({ type: 'SIGIL_SET_LOADING', field: 'ternary', loading: true });
+
+    const decimal = balancedTernaryToDecimal(sigilReader.inputs.ternary);
+    const sigil = sigilDatabase.get(sigilReader.inputs.ternary);
+
+    const result: ConversionResult = {
+      input: sigilReader.inputs.ternary,
+      output: decimal,
+      metadata: {
+        sigil: sigil || null,
+        binary: decimal.toString(2),
+        hex: decimal.toString(16).toUpperCase(),
+        hasSymbol: !!sigil
+      },
+      timestamp: Date.now(),
+      sourceTab: 'ternary'
+    };
+
+    dispatch({ type: 'SIGIL_SET_RESULT', field: 'ternary', result });
+    dispatch({ type: 'SIGIL_ADD_HISTORY_ENTRY', entry: result });
+    dispatch({ type: 'SIGIL_SET_LOADING', field: 'ternary', loading: false });
+  }, [sigilReader.inputs.ternary, sigilDatabase]);
+
+  const handleDecimalConvert = useCallback(async () => {
+    const decimal = parseInt(sigilReader.inputs.decimal);
+
+    if (isNaN(decimal)) {
+      dispatch({ type: 'SIGIL_SET_ERROR', field: 'decimal', error: 'Please enter a valid integer' });
+      return;
+    }
+
+    if (decimal < TERNARY_CONSTANTS.MIN_VALUE || decimal > TERNARY_CONSTANTS.MAX_VALUE) {
+      dispatch({ type: 'SIGIL_SET_ERROR', field: 'decimal', error: `Value must be between ${TERNARY_CONSTANTS.MIN_VALUE} and ${TERNARY_CONSTANTS.MAX_VALUE}` });
+      return;
+    }
+
+    dispatch({ type: 'SIGIL_SET_LOADING', field: 'decimal', loading: true });
+
+    const ternary = decimalToBalancedTernary(decimal);
+    const sigil = sigilDatabase.get(ternary);
+
+    const result: ConversionResult = {
+      input: sigilReader.inputs.decimal,
+      output: ternary,
+      metadata: {
+        sigil: sigil || null,
+        binary: decimal.toString(2),
+        hex: decimal.toString(16).toUpperCase(),
+        hasSymbol: !!sigil
+      },
+      timestamp: Date.now(),
+      sourceTab: 'decimal'
+    };
+
+    dispatch({ type: 'SIGIL_SET_RESULT', field: 'decimal', result });
+    dispatch({ type: 'SIGIL_ADD_HISTORY_ENTRY', entry: result });
+    dispatch({ type: 'SIGIL_SET_LOADING', field: 'decimal', loading: false });
+  }, [sigilReader.inputs.decimal, sigilDatabase]);
+
+  const handleMathOperation = useCallback(() => {
+    const { operand1, operand2, operator } = sigilReader.mathOperation;
+
+    const validation1 = validateTernaryInput(operand1);
+    const validation2 = validateTernaryInput(operand2);
+
+    if (!validation1.isValid) {
+      dispatch({ type: 'SIGIL_SET_ERROR', field: 'math', error: `Operand 1: ${validation1.error}` });
+      return;
+    }
+
+    if (!validation2.isValid) {
+      dispatch({ type: 'SIGIL_SET_ERROR', field: 'math', error: `Operand 2: ${validation2.error}` });
+      return;
+    }
+
+    dispatch({ type: 'SIGIL_SET_LOADING', field: 'math', loading: true });
+    dispatch({ type: 'SIGIL_SET_ERROR', field: 'math', error: null });
+
+    try {
+      const dec1 = balancedTernaryToDecimal(operand1);
+      const dec2 = balancedTernaryToDecimal(operand2);
+
+      let resultDecimal: number;
+      switch (operator) {
+        case '+':
+          resultDecimal = dec1 + dec2;
+          break;
+        case '-':
+          resultDecimal = dec1 - dec2;
+          break;
+        case '*':
+          resultDecimal = dec1 * dec2;
+          break;
+        case '/':
+          if (dec2 === 0) {
+            throw new Error('Division by zero');
+          }
+          resultDecimal = Math.floor(dec1 / dec2);
+          break;
+        default:
+            throw new Error('Invalid operator');
+      }
+
+      if (resultDecimal < TERNARY_CONSTANTS.MIN_VALUE || resultDecimal > TERNARY_CONSTANTS.MAX_VALUE) {
+        throw new Error(`Result ${resultDecimal} is out of range (${TERNARY_CONSTANTS.MIN_VALUE} to ${TERNARY_CONSTANTS.MAX_VALUE})`);
+      }
+
+      const resultTernary = decimalToBalancedTernary(resultDecimal);
+
+      dispatch({
+        type: 'SIGIL_SET_MATH_OPERATION',
+        payload: {
+          result: resultTernary,
+          decimalResult: resultDecimal
+        }
+      });
+
+      const historyEntry: ConversionResult = {
+        input: `${operand1} ${operator} ${operand2}`,
+        output: `${resultTernary} (${resultDecimal})`,
+        metadata: {
+          type: 'math',
+          operation: operator,
+          operand1: { ternary: operand1, decimal: dec1 },
+          operand2: { ternary: operand2, decimal: dec2 },
+          result: { ternary: resultTernary, decimal: resultDecimal }
+        },
+        timestamp: Date.now(),
+        sourceTab: 'math'
+      };
+      dispatch({ type: 'SIGIL_ADD_HISTORY_ENTRY', entry: historyEntry });
+
+    } catch (error: any) {
+      dispatch({ type: 'SIGIL_SET_ERROR', field: 'math', error: error.message });
+    } finally {
+      dispatch({ type: 'SIGIL_SET_LOADING', field: 'math', loading: false });
+    }
+  }, [sigilReader.mathOperation]);
+
+  const handleSearch = useCallback(() => {
+    if (!debouncedSearch) {
+      dispatch({ type: 'SIGIL_SET_RESULT', field: 'search', result: null });
+      return;
+    }
+
+    dispatch({ type: 'SIGIL_SET_LOADING', field: 'search', loading: true });
+
+    const results = Array.from(sigilDatabase.values()).filter(sigil => {
+      const searchLower = debouncedSearch.toLowerCase();
+      const categoryMatch = !sigilReader.ui.selectedCategory || sigil.category === sigilReader.ui.selectedCategory;
+
+      const textMatch =
+        sigil.name.toLowerCase().includes(searchLower) ||
+        sigil.description.toLowerCase().includes(searchLower) ||
+        sigil.ternaryCode.includes(searchLower) ||
+        sigil.tags?.some(tag => tag.toLowerCase().includes(searchLower)) ||
+        sigil.decimalValue.toString() === searchLower;
+
+      return categoryMatch && textMatch;
+    }).slice(0, sigilReader.preferences.resultsLimit);
+
+    dispatch({ type: 'SIGIL_SET_RESULT', field: 'search', result: results });
+    dispatch({ type: 'SIGIL_SET_LOADING', field: 'search', loading: false });
+  }, [debouncedSearch, sigilReader.ui.selectedCategory, sigilReader.preferences.resultsLimit, sigilDatabase]);
+
+  // Sigil Reader Effects
+  useEffect(() => {
+    if (sigilReader.ui.activeTab === 'search') {
+      handleSearch();
+    }
+  }, [debouncedSearch, sigilReader.ui.selectedCategory, handleSearch, sigilReader.ui.activeTab]);
+
+  // Theme management for Sigil Reader
+  useEffect(() => {
+    const applyTheme = (isDark: boolean) => {
+      document.documentElement.classList.toggle('dark', isDark);
+    };
+
+    if (sigilReader.preferences.theme === 'system') {
+      const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const handleChange = (e: MediaQueryListEvent) => applyTheme(e.matches);
+
+      applyTheme(darkModeMediaQuery.matches);
+      darkModeMediaQuery.addEventListener('change', handleChange);
+
+      return () => darkModeMediaQuery.removeEventListener('change', handleChange);
+    }
+
+    applyTheme(sigilReader.preferences.theme === 'dark');
+  }, [sigilReader.preferences.theme]);
+
+
+  // Tab Button Component
+  const TabButton: React.FC<{
+    id: AppState['sigilReader']['ui']['activeTab'],
+    icon: React.ReactNode,
+    label: string,
+    count?: number
+  }> = ({ id, icon, label, count }) => (
+    <button
+      className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all font-medium shadow-sm
+        ${sigilReader.ui.activeTab === id
+          ? 'bg-blue-600 text-white'
+          : 'bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-gray-100'
+        }`}
+      onClick={() => dispatch({ type: 'SIGIL_SET_UI', payload: { activeTab: id } })}
+    >
+      {icon}
+      <span>{label}</span>
+      {count !== undefined && (
+        <span className={`text-xs px-2 py-1 rounded-full ${
+          sigilReader.ui.activeTab === id ? 'bg-white/20' : 'bg-gray-300 dark:bg-gray-600'
+        }`}>
+          {count}
+        </span>
+      )}
+    </button>
+  );
+
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-inter">
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        {/* Header */}
+        <header className="mb-10 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
+            🧠 T-Phi10 Neural Limnus System 🌀
+          </h1>
+          <p className="text-xl text-gray-600 dark:text-gray-400">
+            Neural-Energetic Mapping & Quantum Consciousness Blockchain
+          </p>
+        </header>
+
+        {/* Tab Navigation */}
+        <div className="flex flex-wrap gap-2 mb-8 p-2 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-md">
+          <TabButton id="limnus" icon={<Brain size={16} />} label="Limnus Core" />
+          <TabButton id="sigil" icon={<Search size={16} />} label="Sigil Decoder" />
+          <TabButton id="ternary" icon={<Type size={16} />} label="Ternary Converter" />
+          <TabButton id="decimal" icon={<Hash size={16} />} label="Decimal Converter" />
+          <TabButton id="math" icon={<Calculator size={16} />} label="Ternary Math" />
+          <TabButton id="search" icon={<Grid size={16} />} label="Symbol Search" count={sigilReader.results.search?.length} />
+          <TabButton id="history" icon={<History size={16} />} label="History" count={sigilReader.history.length} />
+          <TabButton id="patterns" icon={<GitBranch size={16} />} label="Patterns" count={patternAnalysis.activePatterns.length} />
+
+          <div className="ml-auto flex gap-2">
+            <button
+              className="flex items-center gap-2 px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors shadow-sm"
+              onClick={() => dispatch({ type: 'SIGIL_SET_UI', payload: { showPreferences: !sigilReader.ui.showPreferences } })}
+            >
+              <Settings size={16} />
+            </button>
+          </div>
+        </div>
+
+        {/* Main Content Area */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          <div className="lg:col-span-3">
+
+            {/* --- Limnus Core Tab --- */}
+            {sigilReader.ui.activeTab === 'limnus' && (
+              <section className="bg-gray-800 rounded-lg p-6 mb-6 shadow-lg">
+                <div className="text-center mb-8">
+                  <h2 className="text-3xl font-bold mb-2 bg-gradient-to-r from-purple-400 via-blue-400 to-green-400 bg-clip-text text-transparent">
+                    Limnus Quantum Field
+                  </h2>
+                  <p className="text-gray-400">Real-time Consciousness Tracking & Blockchain Anchoring</p>
+                </div>
+
+                {/* Blockchain Integration */}
+                <div className="bg-gray-900 rounded-lg p-6 mb-6 shadow-inner border border-gray-700">
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-xl font-semibold flex items-center gap-2 text-purple-400">
+                      <Anchor className="w-5 h-5" />
+                      Solana Blockchain Integration
+                    </h3>
+                    <button
+                      onClick={() => dispatch({ type: 'LIMNUS_SET_BLOCKCHAIN_CONNECTED', payload: !blockchainState.connected })}
+                      className={`px-4 py-2 rounded-lg transition-colors font-medium shadow-md
+                        ${blockchainState.connected
+                          ? 'bg-green-600 hover:bg-green-700 text-white'
+                          : 'bg-gray-600 hover:bg-gray-700 text-white'
+                        }`}
+                    >
+                      {blockchainState.connected ? 'Connected' : 'Connect Wallet'}
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div className="bg-gray-700 p-4 rounded-lg shadow-inner">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Lock className="w-5 h-5 text-green-400" />
+                        <span className="font-medium">Wallet Status</span>
+                      </div>
+                      <div className={`text-lg font-bold ${blockchainState.connected ? 'text-green-400' : 'text-red-400'}`}>
+                        {blockchainState.connected ? 'CONNECTED' : 'DISCONNECTED'}
+                      </div>
+                    </div>
+                    <div className="bg-gray-700 p-4 rounded-lg shadow-inner">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Link className="w-5 h-5 text-blue-400" />
+                        <span className="font-medium">Network</span>
+                      </div>
+                      <div className="text-lg font-bold text-blue-400">SOLANA MAINNET</div>
+                    </div>
+                    <div className="bg-gray-700 p-4 rounded-lg shadow-inner">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Shield className="w-5 h-5 text-yellow-400" />
+                        <span className="font-medium">Blocks Recorded</span>
+                      </div>
+                      <div className="text-lg font-bold text-yellow-400">{blockchainState.blockCount}</div>
+                    </div>
+                    <div className="bg-gray-700 p-4 rounded-lg shadow-inner">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Upload className="w-5 h-5 text-purple-400" />
+                        <span className="font-medium">IPFS Status</span>
+                      </div>
+                      <div className={`text-lg font-bold ${
+                        blockchainState.ipfsStatus === 'connected' ? 'text-green-400' :
+                        blockchainState.ipfsStatus === 'uploading' ? 'text-yellow-400 animate-pulse' :
+                        blockchainState.ipfsStatus === 'error' ? 'text-red-400' : 'text-gray-400'
+                      }`}>
+                        {blockchainState.ipfsStatus.toUpperCase()}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Limnus Spiral & Control */}
+                <div className="bg-gray-900 rounded-lg p-6 mb-6 shadow-inner border border-gray-700">
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-xl font-semibold flex items-center gap-2 text-blue-400">
+                      <Circle className="w-5 h-5" />
+                      Limnus Spiral & Quantum Control
+                    </h3>
+                    <div className="flex gap-4">
+                      <button
+                        onClick={() => dispatch({ type: 'LIMNUS_SET_ACTIVE', payload: !isActive })}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors font-medium shadow-md
+                          ${isActive
+                            ? 'bg-red-600 hover:bg-red-700 text-white'
+                            : 'bg-green-600 hover:bg-green-700 text-white'
+                          }`}
+                      >
+                        {isActive ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+                        {isActive ? 'Pause' : 'Activate'} Field
+                      </button>
+                      <button
+                        onClick={() => dispatch({ type: 'LIMNUS_RESET' })}
+                        className="flex items-center gap-2 px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg transition-colors font-medium shadow-md text-white"
+                      >
+                        <RotateCcw className="w-4 h-4" />
+                        Reset
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Visualization */}
+                    <div className="bg-gray-800 rounded-lg p-4 shadow-inner">
+                      <h4 className="text-md font-semibold mb-3 flex items-center gap-2 text-purple-300">
+                        <Circle className="w-4 h-4" /> Quantum Field Visualization
+                      </h4>
+                      <div className="aspect-square bg-black rounded-lg overflow-hidden border border-purple-400/30 shadow-inner">
+                        <canvas
+                          ref={canvasRef}
+                          width={CONFIG.VISUALIZATION.CANVAS_SIZE.WIDTH}
+                          height={CONFIG.VISUALIZATION.CANVAS_SIZE.HEIGHT}
+                          className="w-full h-full"
+                        />
+                      </div>
+                      {currentSignature && (
+                        <div className="mt-3 text-xs text-gray-400">
+                          <p>Fibonacci-Phi Spiral with Quantum Breath Modulation</p>
+                          <div className="mt-1 flex items-center gap-2">
+                            <span>Glyphs:</span>
+                            <span className="text-lg text-green-400 font-bold">{currentSignature.glyphs.join(' ')}</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Metrics & Status */}
+                    <div className="bg-gray-800 rounded-lg p-4 shadow-inner">
+                      <h4 className="text-md font-semibold mb-3 flex items-center gap-2 text-green-300">
+                        <BarChart2 className="w-4 h-4" /> Real-time Metrics
+                      </h4>
+                      <div className="space-y-3 text-sm">
+                        <div className="flex items-center justify-between">
+                          <span className="font-medium text-gray-300">System Status:</span>
+                          <span className={`text-lg font-bold ${isActive ? 'text-green-400' : 'text-gray-400'}`}>
+                            {isActive ? 'ACTIVE' : 'DORMANT'}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="font-medium text-gray-300">Validation:</span>
+                          <span className={`text-lg font-bold ${getStatusColor(validationStatus)}`}>
+                            {validationStatus.toUpperCase()}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="font-medium text-gray-300">Consciousness Score:</span>
+                          <span className={`text-lg font-bold ${currentSignature ? getScoreColor(currentSignature.score) : 'text-gray-400'}`}>
+                            {currentSignature ? (currentSignature.score * 100).toFixed(1) + '%' : '--'}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="font-medium text-gray-300">Blockchain Resonance:</span>
+                          <span className="text-lg font-bold text-yellow-400">
+                            {currentSignature ? (currentSignature.metrics.blockchainResonance * 100).toFixed(1) + '%' : '--'}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="font-medium text-gray-300">Pattern Alignment:</span>
+                          <span className="text-lg font-bold text-purple-400">
+                            {currentSignature ? (currentSignature.metrics.patternAlignment * 100).toFixed(1) + '%' : '--'}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="font-medium text-gray-300">Spiral Position:</span>
+                          <span className="text-lg font-bold text-yellow-400">
+                            {spiralPosition.depth}/{spiralGenerator.getTotalNodes()}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="font-medium text-gray-300">Heart Rate:</span>
+                          <span className="text-green-400">{biometricData.heartRate.toFixed(0)} BPM</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="font-medium text-gray-300">Emotional State:</span>
+                          <span className="text-lg">{emotionalState.emoji} {emotionalState.hue}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Blockchain History Section */}
+                {blockchainState.blocks.length > 0 && (
+                  <div className="bg-gray-900 rounded-lg p-6 shadow-inner border border-gray-700">
+                    <h3 className="text-xl font-semibold mb-4 flex items-center gap-2 text-yellow-400">
+                      <Anchor className="w-5 h-5" />
+                      Limnus Blockchain History
+                    </h3>
+                    <div className="overflow-x-auto rounded-lg border border-gray-700">
+                      <table className="w-full text-sm">
+                        <thead>
+                          <tr className="text-left text-gray-400 border-b border-gray-700 bg-gray-700">
+                            <th className="pb-3 pt-2 px-4">Time</th>
+                            <th className="pb-3 pt-2 px-4">Transaction ID</th>
+                            <th className="pb-3 pt-2 px-4">Score</th>
+                            <th className="pb-3 pt-2 px-4">Resonance</th>
+                            <th className="pb-3 pt-2 px-4">References</th>
+                            <th className="pb-3 pt-2 px-4">IPFS CID</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {blockchainState.blocks.map((block, index) => (
+                            <tr key={block.id} className={index % 2 === 0 ? 'bg-gray-750' : 'bg-gray-800'}>
+                              <td className="py-2 px-4">
+                                {new Date(block.timestamp * 1000).toLocaleTimeString()}
+                              </td>
+                              <td className="py-2 px-4 font-mono text-blue-400 text-xs">
+                                {block.transactionId.slice(0, 8)}...{block.transactionId.slice(-8)}
+                              </td>
+                              <td className="py-2 px-4 text-green-400">
+                                {(block.score * 100).toFixed(1)}%
+                              </td>
+                              <td className="py-2 px-4 text-yellow-400">
+                                {(block.resonance * 100).toFixed(1)}%
+                              </td>
+                              <td className="py-2 px-4 text-purple-400">
+                                {block.references.length}
+                              </td>
+                              <td className="py-2 px-4 text-yellow-400 font-mono text-xs">
+                                {block.ipfsCid.slice(0, 12)}...
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+              </section>
+            )}
+
+            {/* --- Pattern Analysis Tab --- */}
+            {sigilReader.ui.activeTab === 'patterns' && (
+              <section className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm">
+                <h2 className="text-2xl font-semibold mb-6 text-indigo-500 flex items-center gap-3">
+                  <GitBranch size={24} />
+                  Consciousness Pattern Analysis
+                </h2>
+
+                {patternAnalysis.activePatterns.length > 0 ? (
+                  <div className="space-y-4">
+                    {patternAnalysis.activePatterns.map((pattern, index) => (
+                      <div key={pattern.id} className="p-4 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-lg border border-indigo-200 dark:border-indigo-800 shadow-sm">
+                        <div className="flex justify-between items-start mb-2">
+                          <div>
+                            <h3 className="text-lg font-semibold text-indigo-600 dark:text-indigo-400">
+                              Pattern #{index + 1}
+                            </h3>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">
+                              Signature: {pattern.pattern}
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-2xl font-bold text-indigo-500">
+                              {(pattern.resonanceScore * 100).toFixed(1)}%
+                            </div>
+                            <div className="text-xs text-gray-500">Resonance</div>
+                          </div>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                          <div className="bg-white dark:bg-gray-700 p-3 rounded shadow-inner">
+                            <div className="flex items-center gap-2 mb-1">
+                              <TrendingUp className="w-4 h-4 text-green-500" />
+                              <span className="text-sm font-medium">Frequency</span>
+                            </div>
+                            <div className="text-lg font-bold">{pattern.frequency}</div>
+                          </div>
+                          
+                          <div className="bg-white dark:bg-gray-700 p-3 rounded shadow-inner">
+                            <div className="flex items-center gap-2 mb-1">
+                              <Activity className="w-4 h-4 text-blue-500" />
+                              <span className="text-sm font-medium">Strength</span>
+                            </div>
+                            <div className="text-lg font-bold">{(pattern.strength * 100).toFixed(1)}%</div>
+                          </div>
+                          
+                          <div className="bg-white dark:bg-gray-700 p-3 rounded shadow-inner">
+                            <div className="flex items-center gap-2 mb-1">
+                              <Database className="w-4 h-4 text-purple-500" />
+                              <span className="text-sm font-medium">Block References</span>
+                            </div>
+                            <div className="text-lg font-bold">{pattern.blockReferences.length}</div>
+                          </div>
+                        </div>
+                        
+                        <div className="mt-3 text-sm text-gray-600 dark:text-gray-400">
+                          Last seen: {new Date(pattern.lastSeen * 1000).toLocaleString()}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12 text-gray-500">
+                    <GitBranch size={48} className="mx-auto mb-4 opacity-50" />
+                    <p className="text-lg">No consciousness patterns detected yet</p>
+                    <p className="text-sm mt-2">Patterns will appear as blockchain history grows</p>
+                  </div>
+                )}
+              </section>
+            )}
+
+            {/* --- Sigil Decoder Tab --- */}
+            {sigilReader.ui.activeTab === 'sigil' && (
+              <section className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm">
+                <h2 className="text-2xl font-semibold mb-6 text-green-500 flex items-center gap-3">
+                  <Brain size={24} />
+                  Neural Sigil Decoder
+                </h2>
+
+                <div className="space-y-4">
+                  <div className="flex gap-3">
+                    <input
+                      type="text"
+                      value={sigilReader.inputs.sigil}
+                      onChange={(e) => dispatch({ type: 'SIGIL_SET_INPUT', field: 'sigil', value: e.target.value.toUpperCase() })}
+                      placeholder="Enter 5-digit ternary code (e.g. TT1T1)"
+                      maxLength={5}
+                      className="flex-1 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    />
+                    <button
+                      onClick={handleSigilDecode}
+                      disabled={sigilReader.loadingStates.sigil}
+                      className="bg-green-600 hover:bg-green-700 disabled:bg-gray-500 px-6 py-3 rounded-lg transition-colors flex items-center gap-2 text-white font-medium shadow-md"
+                    >
+                      {sigilReader.loadingStates.sigil ? (
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      ) : (
+                        <Search size={16} />
+                      )}
+                      Decode
+                    </button>
+                  </div>
+
+                  {sigilReader.errors.sigil && (
+                    <div className="flex items-center gap-2 text-red-500 text-sm mt-2 p-2 bg-red-50 dark:bg-red-900/20 rounded">
+                      <AlertCircle size={16} />
+                      <span>{sigilReader.errors.sigil}</span>
+                    </div>
+                  )}
+
+                  {sigilReader.results.sigil && (
+                    <div className="mt-6 p-6 bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-lg border border-green-200 dark:border-green-800 shadow-md">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          <span className="text-5xl drop-shadow-lg">{sigilReader.results.sigil.metadata?.symbol}</span>
+                          <div>
+                            <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{sigilReader.results.sigil.metadata?.name}</h3>
+                            <p className="text-green-600 dark:text-green-400 mt-1">{sigilReader.results.sigil.metadata?.description}</p>
+                            <p className="text-sm text-purple-600 dark:text-purple-400 mt-1 italic">"{sigilReader.results.sigil.metadata?.phrase}"</p>
+                          </div>
+                        </div>
+                        <div className="flex gap-2">
+                            <button
+                                onClick={() => copyToClipboard(sigilReader.results.sigil?.input || '')}
+                                className="bg-white/50 dark:bg-gray-800/50 hover:bg-white/80 dark:hover:bg-gray-700/80 p-3 rounded-lg shadow-sm"
+                                title="Copy ternary code"
+                            >
+                                <Copy size={20} />
+                            </button>
+                            <button
+                                onClick={() => recordOnBlockchain({
+                                  type: 'sigil',
+                                  input: sigilReader.results.sigil!.input,
+                                  output: sigilReader.results.sigil!.output,
+                                  metadata: sigilReader.results.sigil!.metadata
+                                })}
+                                disabled={!currentSignature || !blockchainState.connected || blockchainState.ipfsStatus === 'uploading'}
+                                className="bg-purple-600/50 dark:bg-purple-800/50 hover:bg-purple-600 dark:hover:bg-purple-700 p-3 rounded-lg shadow-sm"
+                                title="Anchor on Limnus Blockchain"
+                            >
+                                <Anchor size={20} />
+                            </button>
+                        </div>
+                      </div>
+
+                      {sigilReader.results.sigil.metadata && (
+                        <>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 text-sm">
+                            <div className="space-y-2">
+                              <div>
+                                <span className="text-gray-600 dark:text-gray-400">Category:</span>
+                                <span className="ml-2 text-blue-600 dark:text-blue-400 capitalize">
+                                  {sigilReader.results.sigil.metadata.category}
+                                </span>
+                              </div>
+                              <div>
+                                <span className="text-gray-600 dark:text-gray-400">Decimal Value:</span>
+                                <span className="ml-2 text-purple-600 dark:text-purple-400 font-mono font-bold">
+                                  {sigilReader.results.sigil.metadata.decimalValue}
+                                </span>
+                              </div>
+                              <div>
+                                <span className="text-gray-600 dark:text-gray-400">Function:</span>
+                                <span className="ml-2 text-gray-700 dark:text-gray-300">
+                                  {sigilReader.results.sigil.metadata.function}
+                                </span>
+                              </div>
+                            </div>
+
+                            <div className="space-y-2">
+                              <div>
+                                <span className="text-gray-600 dark:text-gray-400">Breath Phase:</span>
+                                <span className="ml-2 text-green-600 dark:text-green-400 font-semibold">
+                                  {sigilReader.results.sigil.metadata.breathPhase} ({sigilReader.results.sigil.metadata.breathSeconds}s)
+                                </span>
+                              </div>
+                              <div>
+                                <span className="text-gray-600 dark:text-gray-400">Source:</span>
+                                <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">
+                                  {sigilReader.results.sigil.metadata.historicalSource || 'Unknown'}
+                                </span>
+                              </div>
+                              <div>
+                                <span className="text-gray-600 dark:text-gray-400">Tags:</span>
+                                <span className="ml-2 text-xs">
+                                  {sigilReader.results.sigil.metadata.tags?.map((tag: string, idx: number) => (
+                                    <span key={idx} className="inline-block bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded mr-1">
+                                      {tag}
+                                    </span>
+                                  ))}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="mt-4 p-4 bg-white dark:bg-gray-800 rounded-lg space-y-3">
+                            <div>
+                              <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Neurochemistry</h4>
+                              <p className="text-sm text-gray-600 dark:text-gray-400">
+                                {sigilReader.results.sigil.metadata.neurochemistry}
+                              </p>
+                            </div>
+                            <div>
+                              <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Energetic Dynamic</h4>
+                              <p className="text-sm text-gray-600 dark:text-gray-400">
+                                {sigilReader.results.sigil.metadata.energeticDynamic}
+                              </p>
+                            </div>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </section>
+            )}
+
+            {/* --- Ternary Converter Tab --- */}
+            {sigilReader.ui.activeTab === 'ternary' && (
+              <section className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm">
+                <h2 className="text-2xl font-semibold mb-6 text-blue-500 flex items-center gap-3">
+                  <Type size={24} />
+                  Ternary Converter
+                </h2>
+
+                <div className="space-y-4">
+                  <div className="flex gap-3">
+                    <input
+                      type="text"
+                      value={sigilReader.inputs.ternary}
+                      onChange={(e) => dispatch({ type: 'SIGIL_SET_INPUT', field: 'ternary', value: e.target.value.toUpperCase() })}
+                      placeholder="Enter 5-digit ternary code (e.g. TT1T1)"
+                      maxLength={5}
+                      className="flex-1 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <button
+                      onClick={handleTernaryConvert}
+                      disabled={sigilReader.loadingStates.ternary}
+                      className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-500 px-6 py-3 rounded-lg transition-colors flex items-center gap-2 text-white font-medium shadow-md"
+                    >
+                      {sigilReader.loadingStates.ternary ? (
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      ) : (
+                        <Calculator size={16} />
+                      )}
+                      Convert
+                    </button>
+                  </div>
+
+                  {sigilReader.errors.ternary && (
+                    <div className="flex items-center gap-2 text-red-500 text-sm mt-2 p-2 bg-red-50 dark:bg-red-900/20 rounded">
+                      <AlertCircle size={16} />
+                      <span>{sigilReader.errors.ternary}</span>
+                    </div>
+                  )}
+
+                  {sigilReader.results.ternary && (
+                    <div className="mt-6 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg border border-blue-200 dark:border-blue-800 shadow-md">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                            {sigilReader.results.ternary.output}
+                          </h3>
+                          {sigilReader.results.ternary.metadata?.sigil && (
+                            <div className="flex items-center gap-2 mt-2">
+                              <span className="text-3xl">{sigilReader.results.ternary.metadata.sigil.symbol}</span>
+                              <span className="text-blue-600 dark:text-blue-400">{sigilReader.results.ternary.metadata.sigil.name}</span>
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex gap-2">
+                            <button
+                                onClick={() => copyToClipboard(sigilReader.results.ternary?.output.toString() || '')}
+                                className="bg-white/50 dark:bg-gray-800/50 hover:bg-white/80 dark:hover:bg-gray-700/80 p-3 rounded-lg shadow-sm"
+                                title="Copy decimal value"
+                            >
+                                <Copy size={20} />
+                            </button>
+                            <button
+                                onClick={() => recordOnBlockchain({
+                                  type: 'ternary',
+                                  input: sigilReader.results.ternary!.input,
+                                  output: sigilReader.results.ternary!.output,
+                                  metadata: sigilReader.results.ternary!.metadata
+                                })}
+                                disabled={!currentSignature || !blockchainState.connected || blockchainState.ipfsStatus === 'uploading'}
+                                className="bg-purple-600/50 dark:bg-purple-800/50 hover:bg-purple-600 dark:hover:bg-purple-700 p-3 rounded-lg shadow-sm"
+                                title="Anchor on Limnus Blockchain"
+                            >
+                                <Anchor size={20} />
+                            </button>
+                        </div>
+                      </div>
+
+                      {sigilReader.results.ternary.metadata && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 text-sm">
+                          <div className="space-y-2">
+                            <div>
+                              <span className="text-gray-600 dark:text-gray-400">Binary:</span>
+                              <span className="ml-2 font-mono text-gray-700 dark:text-gray-300">
+                                {sigilReader.results.ternary.metadata.binary}
+                              </span>
+                            </div>
+                            <div>
+                              <span className="text-gray-600 dark:text-gray-400">Hexadecimal:</span>
+                              <span className="ml-2 font-mono text-gray-700 dark:text-gray-300">
+                                0x{sigilReader.results.ternary.metadata.hex}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="space-y-2">
+                            <div>
+                              <span className="text-gray-600 dark:text-gray-400">Ternary Code:</span>
+                              <span className="ml-2 font-mono text-gray-700 dark:text-gray-300">
+                                {sigilReader.inputs.ternary}
+                              </span>
+                            </div>
+                            <div>
+                              <span className="text-gray-600 dark:text-gray-400">Has Symbol:</span>
+                              <span className="ml-2 text-gray-700 dark:text-gray-300">
+                                {sigilReader.results.ternary.metadata.hasSymbol ? 'Yes' : 'No'}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </section>
+            )}
+
+            {/* --- Decimal Converter Tab --- */}
+            {sigilReader.ui.activeTab === 'decimal' && (
+              <section className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm">
+                <h2 className="text-2xl font-semibold mb-6 text-purple-500 flex items-center gap-3">
+                  <Hash size={24} />
+                  Decimal Converter
+                </h2>
+
+                <div className="space-y-4">
+                  <div className="flex gap-3">
+                    <input
+                      type="number"
+                      value={sigilReader.inputs.decimal}
+                      onChange={(e) => dispatch({ type: 'SIGIL_SET_INPUT', field: 'decimal', value: e.target.value })}
+                      placeholder="Enter decimal number (-121 to 121)"
+                      min={TERNARY_CONSTANTS.MIN_VALUE}
+                      max={TERNARY_CONSTANTS.MAX_VALUE}
+                      className="flex-1 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    />
+                    <button
+                      onClick={handleDecimalConvert}
+                      disabled={sigilReader.loadingStates.decimal}
+                      className="bg-purple-600 hover:bg-purple-700 disabled:bg-gray-500 px-6 py-3 rounded-lg transition-colors flex items-center gap-2 text-white font-medium shadow-md"
+                    >
+                      {sigilReader.loadingStates.decimal ? (
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      ) : (
+                        <Hash size={16} />
+                      )}
+                      Convert
+                    </button>
+                  </div>
+
+                  {sigilReader.errors.decimal && (
+                    <div className="flex items-center gap-2 text-red-500 text-sm mt-2 p-2 bg-red-50 dark:bg-red-900/20 rounded">
+                      <AlertCircle size={16} />
+                      <span>{sigilReader.errors.decimal}</span>
+                    </div>
+                  )}
+
+                  {sigilReader.results.decimal && (
+                    <div className="mt-6 p-6 bg-gradient-to-r from-purple-50 to-violet-50 dark:from-purple-900/20 dark:to-violet-900/20 rounded-lg border border-purple-200 dark:border-purple-800 shadow-md">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                            {sigilReader.results.decimal.output}
+                          </h3>
+                          {sigilReader.results.decimal.metadata?.sigil && (
+                            <div className="flex items-center gap-2 mt-2">
+                              <span className="text-3xl">{sigilReader.results.decimal.metadata.sigil.symbol}</span>
+                              <span className="text-purple-600 dark:text-purple-400">{sigilReader.results.decimal.metadata.sigil.name}</span>
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex gap-2">
+                            <button
+                                onClick={() => copyToClipboard(sigilReader.results.decimal?.output.toString() || '')}
+                                className="bg-white/50 dark:bg-gray-800/50 hover:bg-white/80 dark:hover:bg-gray-700/80 p-3 rounded-lg shadow-sm"
+                                title="Copy ternary code"
+                            >
+                                <Copy size={20} />
+                            </button>
+                            <button
+                                onClick={() => recordOnBlockchain({
+                                  type: 'decimal',
+                                  input: sigilReader.results.decimal!.input,
+                                  output: sigilReader.results.decimal!.output,
+                                  metadata: sigilReader.results.decimal!.metadata
+                                })}
+                                disabled={!currentSignature || !blockchainState.connected || blockchainState.ipfsStatus === 'uploading'}
+                                className="bg-purple-600/50 dark:bg-purple-800/50 hover:bg-purple-600 dark:hover:bg-purple-700 p-3 rounded-lg shadow-sm"
+                                title="Anchor on Limnus Blockchain"
+                            >
+                                <Anchor size={20} />
+                            </button>
+                        </div>
+                      </div>
+
+                      {sigilReader.results.decimal.metadata && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 text-sm">
+                          <div className="space-y-2">
+                            <div>
+                              <span className="text-gray-600 dark:text-gray-400">Binary:</span>
+                              <span className="ml-2 font-mono text-gray-700 dark:text-gray-300">
+                                {sigilReader.results.decimal.metadata.binary}
+                              </span>
+                            </div>
+                            <div>
+                              <span className="text-gray-600 dark:text-gray-400">Hexadecimal:</span>
+                              <span className="ml-2 font-mono text-gray-700 dark:text-gray-300">
+                                0x{sigilReader.results.decimal.metadata.hex}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="space-y-2">
+                            <div>
+                              <span className="text-gray-600 dark:text-gray-400">Decimal Input:</span>
+                              <span className="ml-2 font-mono text-gray-700 dark:text-gray-300">
+                                {sigilReader.inputs.decimal}
+                              </span>
+                            </div>
+                            <div>
+                              <span className="text-gray-600 dark:text-gray-400">Has Symbol:</span>
+                              <span className="ml-2 text-gray-700 dark:text-gray-300">
+                                {sigilReader.results.decimal.metadata.hasSymbol ? 'Yes' : 'No'}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </section>
+            )}
+
+            {/* --- Math Operations Tab --- */}
+            {sigilReader.ui.activeTab === 'math' && (
+              <section className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm">
+                <h2 className="text-2xl font-semibold mb-6 text-orange-500 flex items-center gap-3">
+                  <Calculator size={24} />
+                  Ternary Arithmetic Operations
+                </h2>
+
+                <div className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Operand 1
+                      </label>
+                      <input
+                        type="text"
+                        value={sigilReader.mathOperation.operand1}
+                        onChange={(e) => dispatch({
+                          type: 'SIGIL_SET_MATH_OPERATION',
+                          payload: { operand1: e.target.value.toUpperCase() }
+                        })}
+                        placeholder="e.g. TT1T1"
+                        maxLength={5}
+                        className="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Operation
+                      </label>
+                      <select
+                        value={sigilReader.mathOperation.operator}
+                        onChange={(e) => dispatch({
+                          type: 'SIGIL_SET_MATH_OPERATION',
+                          payload: { operator: e.target.value as any }
+                        })}
+                        className="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      >
+                        <option value="+">Addition (+)</option>
+                        <option value="-">Subtraction (-)</option>
+                        <option value="*">Multiplication (×)</option>
+                        <option value="/">Division (÷)</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Operand 2
+                      </label>
+                      <input
+                        type="text"
+                        value={sigilReader.mathOperation.operand2}
+                        onChange={(e) => dispatch({
+                          type: 'SIGIL_SET_MATH_OPERATION',
+                          payload: { operand2: e.target.value.toUpperCase() }
+                        })}
+                        placeholder="e.g. 1T0T0"
+                        maxLength={5}
+                        className="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      />
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={handleMathOperation}
+                    disabled={sigilReader.loadingStates.math}
+                    className="bg-orange-600 hover:bg-orange-700 disabled:bg-gray-500 px-6 py-3 rounded-lg transition-colors flex items-center justify-center gap-2 text-white font-medium w-full md:w-auto shadow-md"
+                  >
+                    {sigilReader.loadingStates.math ? (
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    ) : (
+                      <Calculator size={16} />
+                    )}
+                    Calculate
+                  </button>
+
+                  {sigilReader.errors.math && (
+                    <div className="flex items-center gap-2 text-red-500 text-sm p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                      <AlertCircle size={16} />
+                      <span>{sigilReader.errors.math}</span>
+                    </div>
+                  )}
+
+                  {sigilReader.mathOperation.result && (
+                    <div className="mt-6 p-6 bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-900/20 dark:to-amber-900/20 rounded-lg border border-orange-200 dark:border-orange-800 shadow-md">
+                      <div className="space-y-4">
+                        <h3 className="text-xl font-bold text-gray-900 dark:text-white">Result</h3>
+
+                        <div className="text-2xl font-mono bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+                          <span className="text-gray-600 dark:text-gray-400">{sigilReader.mathOperation.operand1}</span>
+                          <span className="mx-3 text-orange-500 font-bold">{sigilReader.mathOperation.operator}</span>
+                          <span className="text-gray-600 dark:text-gray-400">{sigilReader.mathOperation.operand2}</span>
+                          <span className="mx-3 text-gray-400">=</span>
+                          <span className="text-orange-600 dark:text-orange-400 font-bold">{sigilReader.mathOperation.result}</span>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                          <div>
+                            <span className="text-gray-600 dark:text-gray-400">Decimal Result:</span>
+                            <span className="ml-2 text-lg font-bold text-orange-600 dark:text-orange-400">
+                              {sigilReader.mathOperation.decimalResult}
+                            </span>
+                          </div>
+
+                          {(() => {
+                            const sigil = sigilDatabase.get(sigilReader.mathOperation.result!);
+                            return sigil ? (
+                              <div className="border-l border-gray-200 dark:border-gray-700 pl-4">
+                                <span className="text-gray-600 dark:text-gray-400">Resulting Sigil:</span>
+                                <div className="flex items-center gap-2 mt-1">
+                                  <span className="text-2xl">{sigil.symbol}</span>
+                                  <span className="font-medium">{sigil.name}</span>
+                                </div>
+                              </div>
+                            ) : null;
+                          })()}
+                        </div>
+
+                        <div className="flex justify-end gap-2 mt-4">
+                          <button
+                            onClick={() => copyToClipboard(sigilReader.mathOperation.result!)}
+                            className="flex items-center gap-2 px-4 py-2 bg-white/50 dark:bg-gray-800/50 hover:bg-white/80 dark:hover:bg-gray-700/80 rounded-lg shadow-sm"
+                          >
+                            <Copy size={16} />
+                            Copy Result
+                          </button>
+                            <button
+                                onClick={() => recordOnBlockchain({
+                                    type: 'math',
+                                    input: `${sigilReader.mathOperation.operand1} ${sigilReader.mathOperation.operator} ${sigilReader.mathOperation.operand2}`,
+                                    output: sigilReader.mathOperation.result!,
+                                    metadata: sigilReader.mathOperation
+                                })}
+                                disabled={!currentSignature || !blockchainState.connected || blockchainState.ipfsStatus === 'uploading'}
+                                className="bg-purple-600/50 dark:bg-purple-800/50 hover:bg-purple-600 dark:hover:bg-purple-700 p-3 rounded-lg shadow-sm"
+                                title="Anchor on Limnus Blockchain"
+                            >
+                                <Anchor size={20} />
+                            </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Examples */}
+                  <div className="mt-8 p-4 bg-gray-50 dark:bg-gray-750 rounded-lg">
+                    <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Examples:</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                      <div className="font-mono text-gray-600 dark:text-gray-400">
+                        <div>00001 + 00001 = 00011 (1 + 1 = 2)</div>
+                        <div>00011 - 00001 = 00001 (2 - 1 = 1)</div>
+                      </div>
+                      <div className="font-mono text-gray-600 dark:text-gray-400">
+                        <div>0001T * 00011 = 00110 (3 × 2 = 6)</div>
+                        <div>00110 / 00011 = 0001T (6 ÷ 2 = 3)</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            )}
+
+            {/* --- Symbol Search Tab --- */}
+            {sigilReader.ui.activeTab === 'search' && (
+              <section className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-2xl font-semibold text-amber-500 flex items-center gap-3">
+                    <Grid size={24} />
+                    Symbol Search
+                  </h2>
+
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => dispatch({ type: 'SIGIL_SET_UI', payload: { showFilters: !sigilReader.ui.showFilters } })}
+                      className={`p-2 rounded-lg shadow-sm ${
+                        sigilReader.ui.showFilters
+                          ? 'bg-amber-600 text-white'
+                          : 'bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-gray-100'
+                      }`}
+                      title="Toggle Filters"
+                    >
+                      <Filter size={16} />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <input
+                    type="text"
+                    value={sigilReader.ui.searchQuery}
+                    onChange={(e) => dispatch({ type: 'SIGIL_SET_UI', payload: { searchQuery: e.target.value } })}
+                    placeholder="Search symbols by name, description, tags..."
+                    className="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
+                  />
+
+                  {/* Filters Panel */}
+                  {sigilReader.ui.showFilters && (
+                    <div className="p-4 bg-gray-50 dark:bg-gray-750 rounded-lg border border-gray-200 dark:border-gray-700">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Category
+                          </label>
+                          <select
+                            value={sigilReader.ui.selectedCategory || ''}
+                            onChange={(e) => dispatch({ type: 'SIGIL_SET_UI', payload: { selectedCategory: e.target.value || null } })}
+                            className="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg p-2 focus:ring-2 focus:ring-amber-500"
+                          >
+                            <option value="">All Categories</option>
+                            <option value="brainstem">Brainstem</option>
+                            <option value="thalamic">Thalamic</option>
+                            <option value="basal-ganglia">Basal Ganglia</option>
+                            <option value="limbic">Limbic</option>
+                            <option value="cortical">Cortical</option>
+                            <option value="memory">Memory</option>
+                            <option value="integration">Integration</option>
+                            <option value="cerebellar">Cerebellar</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Search Results */}
+                  <div className="mt-6">
+                    {sigilReader.loadingStates.search ? (
+                      <div className="flex justify-center py-12">
+                        <div className="w-10 h-10 border-4 border-amber-500 border-t-transparent rounded-full animate-spin" />
+                      </div>
+                    ) : sigilReader.results.search && sigilReader.results.search.length > 0 ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                        {sigilReader.results.search.map((sigil) => (
+                          <div
+                            key={sigil.id}
+                            className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-850 rounded-lg border border-gray-200 dark:border-gray-700 p-4 hover:shadow-lg transition-all duration-200 hover:scale-105 cursor-pointer shadow-md"
+                            onClick={() => {
+                              dispatch({ type: 'SIGIL_SET_INPUT', field: 'sigil', value: sigil.ternaryCode });
+                              dispatch({ type: 'SIGIL_SET_UI', payload: { activeTab: 'sigil' } });
+                            }}
+                          >
+                            <div className="flex items-start gap-3">
+                              <span className="text-4xl drop-shadow-sm">{sigil.symbol}</span>
+                              <div className="flex-1 min-w-0">
+                                <h3 className="font-bold text-gray-900 dark:text-white truncate">{sigil.name}</h3>
+                                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">{sigil.description}</p>
+                                <p className="text-xs text-purple-600 dark:text-purple-400 mt-1 italic line-clamp-1">"{sigil.phrase}"</p>
+                                <div className="flex items-center gap-2 mt-3 flex-wrap">
+                                  <span className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 px-2 py-1 rounded">
+                                    {sigil.category}
+                                  </span>
+                                  <span className="text-xs bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 px-2 py-1 rounded">
+                                    {sigil.breathPhase}
+                                  </span>
+                                  <span className="text-xs bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 px-2 py-1 rounded">
+                                    {sigil.decimalValue}
+                                  </span>
+                                  <span className="text-xs font-mono bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded">
+                                    {sigil.ternaryCode}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : sigilReader.ui.searchQuery ? (
+                      <div className="text-center py-12 text-gray-500">
+                        <Search size={48} className="mx-auto mb-4 opacity-50" />
+                        <p className="text-lg">No symbols found matching your search</p>
+                      </div>
+                    ) : (
+                      <div className="text-center py-12 text-gray-500">
+                        <Grid size={48} className="mx-auto mb-4 opacity-50" />
+                        <p className="text-lg">Enter a search term to explore symbols</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </section>
+            )}
+
+            {/* --- History Tab --- */}
+            {sigilReader.ui.activeTab === 'history' && (
+              <section className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm">
+                <h2 className="text-2xl font-semibold mb-6 text-indigo-500 flex items-center gap-3">
+                  <History size={24} />
+                  Conversion History
+                </h2>
+
+                {sigilReader.history.length > 0 ? (
+                  <div className="space-y-4 max-h-[500px] overflow-y-auto">
+                    {sigilReader.history.map((entry, index) => (
+                      <div key={index} className="p-4 bg-gray-50 dark:bg-gray-750 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <div className="font-medium text-gray-900 dark:text-white">
+                              <span className="text-blue-500 capitalize mr-2">[{entry.sourceTab}]</span>
+                              {entry.input} → {entry.output}
+                            </div>
+                            <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                              {new Date(entry.timestamp).toLocaleString()}
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => recordOnBlockchain({
+                              type: entry.sourceTab,
+                              input: entry.input,
+                              output: entry.output,
+                              metadata: entry.metadata
+                            })}
+                            disabled={!currentSignature || !blockchainState.connected || blockchainState.ipfsStatus === 'uploading'}
+                            className="bg-purple-600/50 dark:bg-purple-800/50 hover:bg-purple-600 dark:hover:bg-purple-700 p-2 rounded-lg shadow-sm"
+                            title="Anchor on Limnus Blockchain"
+                          >
+                            <Anchor size={16} />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12 text-gray-500">
+                    <History size={48} className="mx-auto mb-4 opacity-50" />
+                    <p className="text-lg">No conversion history yet</p>
+                    <p className="text-sm mt-2">Perform conversions to see them here</p>
+                  </div>
+                )}
+              </section>
+            )}
+          </div>
+
+          {/* Sidebar */}
+          <div className="space-y-6">
+            {/* Preferences Panel (from Sigil Reader) */}
+            {sigilReader.ui.showPreferences && (
+              <section className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-yellow-500 flex items-center gap-2">
+                    <Settings size={20} />
+                    Preferences
+                  </h3>
+                  <button
+                    onClick={() => dispatch({ type: 'SIGIL_SET_UI', payload: { showPreferences: false } })}
+                    className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 p-1"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+
+                <div className="space-y-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Theme Preference
+                    </label>
+                    <select
+                      value={sigilReader.preferences.theme}
+                      onChange={(e) => dispatch({ type: 'SIGIL_SET_PREFERENCE', payload: { theme: e.target.value as any } })}
+                      className="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg p-3 focus:ring-2 focus:ring-yellow-500"
+                    >
+                      <option value="system">Follow System</option>
+                      <option value="light">Light Mode</option>
+                      <option value="dark">Dark Mode</option>
+                    </select>
+                  </div>
+                </div>
+              </section>
+            )}
+
+            {/* Blockchain Influence Panel */}
+            {(sigilReader.ui.activeTab === 'limnus' || sigilReader.ui.activeTab === 'patterns') && currentSignature && currentSignature.blockchainReferences.length > 0 && (
+              <section className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm">
+                <h3 className="text-lg font-semibold mb-4 text-amber-500 flex items-center gap-2">
+                  <Database size={20} />
+                  Blockchain Influence
+                </h3>
+                
+                <div className="space-y-3">
+                  {currentSignature.blockchainReferences.slice(0, 5).map((ref, index) => (
+                    <div key={ref.blockId} className="p-3 bg-gray-50 dark:bg-gray-750 rounded-lg">
+                      <div className="flex justify-between items-start mb-2">
+                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                          Block #{blockchainState.blockCount - index}
+                        </span>
+                        <span className="text-xs text-gray-500">
+                          {new Date(ref.timestamp).toLocaleTimeString()}
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2 text-xs">
+                        <div>
+                          <span className="text-gray-600 dark:text-gray-400">Influence:</span>
+                          <span className="ml-1 font-bold text-amber-600">
+                            {(ref.influence * 100).toFixed(1)}%
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-gray-600 dark:text-gray-400">Resonance:</span>
+                          <span className="ml-1 font-bold text-purple-600">
+                            {(ref.resonance * 100).toFixed(1)}%
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* Quick Actions */}
+            <section className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm">
+              <h3 className="text-lg font-semibold mb-4 text-pink-500 flex items-center gap-2">
+                <Zap size={20} />
+                Quick Actions
+              </h3>
+
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  onClick={() => dispatch({ type: 'SIGIL_RESET' })}
+                  className="flex flex-col items-center justify-center gap-2 p-4 bg-gray-100 dark:bg-gray-750 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors group shadow-md"
+                >
+                  <RefreshCw size={24} className="group-hover:rotate-180 transition-transform" />
+                  <span className="text-sm font-medium">Reset Sigil</span>
+                </button>
+                
+                <button
+                  onClick={() => recordOnBlockchain()}
+                  disabled={!currentSignature || !blockchainState.connected || blockchainState.ipfsStatus === 'uploading'}
+                  className="flex flex-col items-center justify-center gap-2 p-4 bg-purple-100 dark:bg-purple-900/30 hover:bg-purple-200 dark:hover:bg-purple-800/30 rounded-lg transition-colors group shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <Anchor size={24} className="group-hover:scale-110 transition-transform" />
+                  <span className="text-sm font-medium">Anchor Now</span>
+                </button>
+              </div>
+            </section>
+          </div>
+        </div>
+
+        {/* Custom Message Box */}
+        {messageBox && (
+          <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
+            <div className="bg-gray-800 rounded-lg shadow-xl border border-gray-700 max-w-md w-full p-6 relative">
+              <button
+                onClick={hideCustomMessage}
+                className="absolute top-3 right-3 text-gray-400 hover:text-gray-200"
+                title="Close"
+              >
+                <X size={20} />
+              </button>
+              <h3 className="text-xl font-bold text-white mb-3">{messageBox.title}</h3>
+              <p className="text-gray-300 whitespace-pre-wrap">{messageBox.content}</p>
+              <button
+                onClick={hideCustomMessage}
+                className="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg"
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Footer */}
+        <footer className="mt-16 pt-8 border-t border-gray-200 dark:border-gray-800 text-center">
+          <div className="text-gray-600 dark:text-gray-400 mb-4">
+            <p className="text-lg font-semibold">T-Phi10 Neural Limnus System v3.0</p>
+            <p>Neural-Energetic Mapping & Quantum Consciousness Blockchain</p>
+            <p className="text-sm mt-2">Enhanced with Brain Region Mapping & Breath-Consciousness Integration</p>
+          </div>
+
+          <p className="text-xs text-gray-600 dark:text-gray-500 italic max-w-2xl mx-auto">
+            "The ternary system maps the neural architecture from brainstem to cortex, encoding each brain region's unique energetic signature. Integrated with the Limnus spiral, it creates a living map of consciousness anchored to the blockchain through breath, neurochemistry, and the golden ratio's infinite recursion."
+          </p>
+        </footer>
+      </div>
+    </div>
+  );
+};
+
+export default App;
