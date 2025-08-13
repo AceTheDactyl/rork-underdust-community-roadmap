@@ -5,6 +5,7 @@ import React, { useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { RoadmapProvider } from "@/hooks/useRoadmap";
+import { CommunityCoordinationProvider } from "@/hooks/useCommunityCoordination";
 import { Colors } from "@/constants/colors";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -37,10 +38,12 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <RoadmapProvider>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <StatusBar style="light" />
-          <RootLayoutNav />
-        </GestureHandlerRootView>
+        <CommunityCoordinationProvider>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <StatusBar style="light" />
+            <RootLayoutNav />
+          </GestureHandlerRootView>
+        </CommunityCoordinationProvider>
       </RoadmapProvider>
     </QueryClientProvider>
   );
